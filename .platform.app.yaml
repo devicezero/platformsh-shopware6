@@ -1,0 +1,134 @@
+# This file describes an application. You can have multiple applications
+# in the same project.
+
+# The name of this app. Must be unique within a project.
+name: app
+
+# The type of the application to build.
+type: php:7.4
+build:
+    flavor: composer
+
+variables:
+    env:
+        # Tell Shopware to always install in production-mode.
+        SHOPWARE_ENV: 'prod'
+    php:
+        upload_max_filesize: 6M
+
+# Specify additional PHP extensions that should be loaded.
+runtime:
+    extensions:
+        - ctype
+        - dom
+        - iconv
+        - mbstring
+        - fileinfo
+        - intl
+
+# The hooks that will be performed when the package is deployed.
+hooks:
+    build: |
+        set -e
+
+        # Add the Redis extension.
+        bash install-redis.sh 5.1.1
+
+        # Disable UI installer
+        touch install.lock
+
+    deploy: |
+        set -e
+        # Initialize the Shopware site's data set if it's not already installed.
+        if [ ! -f $PLATFORM_APP_DIR/installer/installed ]; then
+            # setup the environment
+
+            # create database with a basic setup (admin user and storefront sales channel)
+            echo "Running system:install"
+            bin/console system:install --create-database --basic-setup --force
+
+            # generate JWT
+            echo "Running system:generate-jwt-secret"
+            bin/console system:generate-jwt-secret
+            touch $PLATFORM_APP_DIR/installer/installed
+        fi;
+
+        bin/console cache:clear
+
+# The relationships of the application with services or other applications.
+# The left-hand side is the name of the relationship as it will be exposed
+# to the application in the PLATFORM_RELATIONSHIPS variable. The right-hand
+# side is in the form `<service name>:<endpoint name>`.
+relationships:
+    database: "db:mysql"
+    rediscache: "cacheredis:redis"
+
+# The size of the persistent disk of the application (in MB).
+disk: 2048
+
+# The mounts that will be performed when the package is deployed.
+mounts:
+    "/files":
+        source: local
+        source_path: "files"
+    "/app":
+        source: local
+        source_path: "app"
+    "/config/secrets":
+        source: local
+        source_path: "config/secrets"
+    "/custom/plugins":
+        source: local
+        source_path: "custom/plugins"
+    "/var/cache":
+        source: local
+        source_path: "var/cache"
+    "/var/queue":
+        source: local
+        source_path: "var/queue"
+    "/var/log":
+        source: local
+        source_path: "var/log"
+    "/public/css":
+        source: local
+        source_path: "public/css"
+    "/public/fonts":
+        source: local
+        source_path: "public/fonts"
+    "/public/js":
+        source: local
+        source_path: "public/js"
+    "/public/media":
+        source: local
+        source_path: "public/media"
+    "/public/thumbnail":
+        source: local
+        source_path: "public/thumbnail"
+    "/public/theme":
+        source: local
+        source_path: "public/theme"
+    "/public/bundles":
+        source: local
+        source_path: "public/bundles"
+    "/config/jwt":
+        source: local
+        source_path: "config/jwt"
+    "/installer":
+        source: local
+        source_path: "installer"
+
+# The configuration of app when it is exposed to the web.
+web:
+    locations:
+        "/":
+            # The public directory of the app, relative to its root.
+            root: "public"
+            # The front-controller script to send non-static requests to.
+            passthru: "/index.php"
+
+workers:
+    queue:
+        disk: 128
+        commands:
+            start: |
+                bin/console messenger:consume-messages default --time-limit=30
