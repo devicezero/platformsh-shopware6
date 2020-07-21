@@ -41,9 +41,9 @@ hooks:
 
     deploy: |
         set -e
-        export FRONTEND_URL=`echo $PLATFORM_ROUTES|base64 -d|json_pp| jq -r 'to_entries | map_values(.value + { slug: .key }) | .[] | select(.primary == true) | .slug'`
 
         if [ "$PLATFORM_BRANCH" != "master" ]; then
+            export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq 'to_entries[] | select(.value.id=="shopware") | .key'`
             bin/console sales-channel:update-domain "$FRONTEND_URL"
         fi
 
