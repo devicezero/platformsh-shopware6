@@ -42,8 +42,6 @@ hooks:
     deploy: |
         set -e
         export FRONTEND_URL=`echo $PLATFORM_ROUTES|base64 -d|json_pp| jq -r 'to_entries | map_values(.value + { slug: .key }) | .[] | select(.primary == true) | .slug'`
-        bin/console plugin:refresh
-        bin/console plugin:install --activate SwagPaas
 
         if [ "$PLATFORM_BRANCH" != "master" ]; then
             bin/console sales-channel:update-domain "$FRONTEND_URL"
@@ -60,6 +58,12 @@ hooks:
             # generate JWT
             echo "Running system:generate-jwt-secret"
             bin/console system:generate-jwt-secret
+
+            # refresh plugins and enable PaaS Plugin
+            bin/console plugin:refresh
+            bin/console plugin:install --activate SwagPaas
+
+            # mark system as installed
             touch $PLATFORM_APP_DIR/installer/installed
         fi;
 
