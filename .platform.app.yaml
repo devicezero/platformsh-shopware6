@@ -41,6 +41,14 @@ hooks:
 
     deploy: |
         set -e
+        export FRONTEND_URL=`echo $PLATFORM_ROUTES|base64 -d|json_pp| jq -r 'to_entries | map_values(.value + { slug: .key }) | .[] | select(.primary == true) | .slug'`
+        bin/console plugin:refresh
+        bin/console plugin:install --activate SwagPaas
+
+        if [ "$PLATFORM_BRANCH" != "master" ]; then
+            bin/console sales-channel:update-domain "$FRONTEND_URL"
+        fi
+
         # Initialize the Shopware site's data set if it's not already installed.
         if [ ! -f $PLATFORM_APP_DIR/installer/installed ]; then
             # setup the environment

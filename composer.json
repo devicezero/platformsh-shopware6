@@ -40,6 +40,10 @@
             "options": {
                 "symlink": true
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jenskueper/swag-paas.git"
         }
     ],
     "require": {
@@ -50,7 +54,8 @@
         "shopware\/storefront": "~v6.2",
         "shopware\/elasticsearch": "~v6.2",
         "shopware\/recovery": "~v6.2",
-        "platformsh/symfonyflex-bridge": "^2.2"
+        "platformsh/symfonyflex-bridge": "^2.2",
+        "shopware/paas": "dev-master"
     },
     "require-dev": {
         "ext-tokenizer": "*",
