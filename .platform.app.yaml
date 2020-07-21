@@ -43,7 +43,7 @@ hooks:
         set -e
 
         if [ "$PLATFORM_BRANCH" != "master" ]; then
-            export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq 'to_entries[] | select(.value.id=="shopware") | .key'`
+            export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
             bin/console sales-channel:update-domain "$FRONTEND_URL"
         fi
 
