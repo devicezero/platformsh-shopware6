@@ -7,7 +7,7 @@ name: app
 # The type of the application to build.
 type: php:7.4
 build:
-    flavor: none
+    flavor: composer
 
 variables:
     env:
@@ -41,9 +41,8 @@ hooks:
         nvm current
         nvm install 12
 
-        # run composer install and other install steps
+        # run other install steps
         bin/console theme:compile
-        bash bin/build.sh
         bash bin/build-js.sh
 
         # Add the Redis extension.
