@@ -7,7 +7,7 @@ name: app
 # The type of the application to build.
 type: php:7.4
 build:
-    flavor: composer
+    flavor: none
 
 variables:
     env:
@@ -33,6 +33,19 @@ hooks:
     build: |
         set -e
 
+        # install nvm
+        unset NPM_CONFIG_PREFIX
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | dash
+        export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm current
+        nvm install 12
+
+        # run composer install and other install steps
+        bin/console theme:compile
+        bash bin/build.sh
+        bash bin/build-js.sh
+
         # Add the Redis extension.
         bash install-redis.sh 5.1.1
 
@@ -41,6 +54,14 @@ hooks:
 
     deploy: |
         set -e
+
+        # This is necessary for nvm to work.
+        unset NPM_CONFIG_PREFIX
+        # Disable npm update notifier; being a read only system it will probably annoy you.
+        export NO_UPDATE_NOTIFIER=1
+        # This loads nvm for general usage.
+        export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
         if [ "$PLATFORM_BRANCH" != "master" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
@@ -67,7 +88,8 @@ hooks:
             touch $PLATFORM_APP_DIR/installer/installed
         fi;
 
-        bin/console database:migrate --all
+        # optional: run migration automatically with deploy
+        # bin/console database:migrate --all
         bin/console cache:clear
 
 # The relationships of the application with services or other applications.
