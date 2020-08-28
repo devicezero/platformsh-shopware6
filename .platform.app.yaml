@@ -41,10 +41,6 @@ hooks:
         nvm current
         nvm install 12
 
-        # run other install steps
-        bin/console theme:compile
-        bash bin/build-js.sh
-
         # Add the Redis extension.
         bash install-redis.sh 5.1.1
 
