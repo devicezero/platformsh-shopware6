@@ -67,6 +67,7 @@ hooks:
             touch $PLATFORM_APP_DIR/installer/installed
         fi;
 
+        bin/console database:migrate --all
         bin/console cache:clear
 
 # The relationships of the application with services or other applications.
