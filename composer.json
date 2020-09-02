@@ -57,6 +57,7 @@
         "shopware\/storefront": "~v6.3.0",
         "shopware\/elasticsearch": "~v6.3.0",
         "shopware\/recovery": "~v6.3.0",
+        "platformsh/symfonyflex-bridge": "^2.2",
         "shopware/paas": "dev-master"
     },
     "require-dev": {
