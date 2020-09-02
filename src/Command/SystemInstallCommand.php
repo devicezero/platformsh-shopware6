@@ -156,8 +156,7 @@ class SystemInstallCommand extends Command
 
         $commands = array_merge($commands, [
                 [
-                    'command' => 'assets:install',
-                    '--no-cleanup' => true,
+                    'command' => 'assets:install'
                 ],
                 [
                     'command' => 'cache:clear'
@@ -165,6 +164,10 @@ class SystemInstallCommand extends Command
         ]);
 
         $this->runCommands($commands, $output);
+
+        if (!file_exists($this->projectDir . '/public/.htaccess')) {
+            copy($this->projectDir . '/public/.htaccess.dist', $this->projectDir . '/public/.htaccess');
+        }
 
         touch($this->projectDir . '/install.lock');
 

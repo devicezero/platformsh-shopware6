@@ -10,4 +10,6 @@ export HOST=${HOST:-"localhost"}
 export ESLINT_DISABLE
 export PORT
 
-npm run --prefix vendor/shopware/administration/Resources/app/administration/ dev -- ${APP_URL}
+bin/console feature:dump || true
+
+npm run --prefix vendor/shopware/administration/Resources/app/administration/ dev

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5895be9dbfe651fb7fdbf89241f5eb23",
+    "content-hash": "37cf138f0cf14ec41aaf4eb72175e199",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3220,90 +3220,6 @@
             "time": "2015-12-19T14:08:53+00:00"
         },
         {
-            "name": "platformsh/config-reader",
-            "version": "2.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/platformsh/config-reader-php.git",
-                "reference": "9951de0f1b3a12792113621238bc31a0524d6e52"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/platformsh/config-reader-php/zipball/9951de0f1b3a12792113621238bc31a0524d6e52",
-                "reference": "9951de0f1b3a12792113621238bc31a0524d6e52",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Platformsh\\ConfigReader\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Larry Garfield",
-                    "email": "larry@platform.sh"
-                }
-            ],
-            "description": "Small helper to access Platform.sh environment variables",
-            "time": "2019-11-05T19:56:33+00:00"
-        },
-        {
-            "name": "platformsh/symfonyflex-bridge",
-            "version": "2.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/platformsh/symfonyflex-bridge.git",
-                "reference": "95e4e3da4ac6e6a84d6d77282588314addd0c132"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/platformsh/symfonyflex-bridge/zipball/95e4e3da4ac6e6a84d6d77282588314addd0c132",
-                "reference": "95e4e3da4ac6e6a84d6d77282588314addd0c132",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1",
-                "platformsh/config-reader": "^2.1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.4"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "platformsh-flex-env.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Larry Garfield",
-                    "email": "larry@platform.sh"
-                }
-            ],
-            "description": "Bridge library for running Symfony Flex on Platform.sh",
-            "time": "2020-02-10T21:39:12+00:00"
-        },
-        {
             "name": "psr/cache",
             "version": "1.0.1",
             "source": {
@@ -5955,16 +5871,16 @@
         },
         {
             "name": "symfony/intl",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/intl.git",
-                "reference": "7299f8c95ffd2623986c976fb8c48beb4c4cb44d"
+                "reference": "b6886c43cc1ae3367c569c5a8d4182555dd694fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/intl/zipball/7299f8c95ffd2623986c976fb8c48beb4c4cb44d",
-                "reference": "7299f8c95ffd2623986c976fb8c48beb4c4cb44d",
+                "url": "https://api.github.com/repos/symfony/intl/zipball/b6886c43cc1ae3367c569c5a8d4182555dd694fb",
+                "reference": "b6886c43cc1ae3367c569c5a8d4182555dd694fb",
                 "shasum": ""
             },
             "require": {
@@ -6041,7 +5957,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-18T18:24:02+00:00"
+            "time": "2020-08-17T07:42:30+00:00"
         },
         {
             "name": "symfony/messenger",
@@ -7806,16 +7722,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "f629ba9b611c76224feb21fe2bcbf0b6f992300b"
+                "reference": "0de4cc1e18bb596226c06a82e2e7e9bc6001a63a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/f629ba9b611c76224feb21fe2bcbf0b6f992300b",
-                "reference": "f629ba9b611c76224feb21fe2bcbf0b6f992300b",
+                "url": "https://api.github.com/repos/symfony/string/zipball/0de4cc1e18bb596226c06a82e2e7e9bc6001a63a",
+                "reference": "0de4cc1e18bb596226c06a82e2e7e9bc6001a63a",
                 "shasum": ""
             },
             "require": {
@@ -7887,7 +7803,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-08T08:27:49+00:00"
+            "time": "2020-08-17T07:48:54+00:00"
         },
         {
             "name": "symfony/swiftmailer-bundle",
@@ -8359,16 +8275,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v4.4.11",
+            "version": "v4.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "2125805a1a4e57f2340bc566c3013ca94d2722dc"
+                "reference": "1bef32329f3166486ab7cb88599cae4875632b99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2125805a1a4e57f2340bc566c3013ca94d2722dc",
-                "reference": "2125805a1a4e57f2340bc566c3013ca94d2722dc",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/1bef32329f3166486ab7cb88599cae4875632b99",
+                "reference": "1bef32329f3166486ab7cb88599cae4875632b99",
                 "shasum": ""
             },
             "require": {
@@ -8446,7 +8362,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-24T13:34:53+00:00"
+            "time": "2020-08-17T07:31:35+00:00"
         },
         {
             "name": "symfony/var-exporter",
@@ -9787,16 +9703,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "8.3.5",
+            "version": "8.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "302faed7059fde575cf3403a78c730c5e3a62750"
+                "reference": "34c18baa6a44f1d1fbf0338907139e9dce95b997"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/302faed7059fde575cf3403a78c730c5e3a62750",
-                "reference": "302faed7059fde575cf3403a78c730c5e3a62750",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/34c18baa6a44f1d1fbf0338907139e9dce95b997",
+                "reference": "34c18baa6a44f1d1fbf0338907139e9dce95b997",
                 "shasum": ""
             },
             "require": {
@@ -9840,7 +9756,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.3-dev"
+                    "dev-master": "8.5-dev"
                 }
             },
             "autoload": {
@@ -9866,7 +9782,17 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-09-14T09:12:03+00:00"
+            "funding": [
+                {
+                    "url": "https://phpunit.de/donate.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-06-22T07:06:58+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -10535,7 +10461,7 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v4.4.11",
+            "version": "v4.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
@@ -10608,16 +10534,16 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v4.4.11",
+            "version": "v4.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "72b3a65ddd5052cf6d65eac6669748ed311f39bf"
+                "reference": "6dd1e7adef4b7efeeb9691fd619279027d4dcf85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/72b3a65ddd5052cf6d65eac6669748ed311f39bf",
-                "reference": "72b3a65ddd5052cf6d65eac6669748ed311f39bf",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/6dd1e7adef4b7efeeb9691fd619279027d4dcf85",
+                "reference": "6dd1e7adef4b7efeeb9691fd619279027d4dcf85",
                 "shasum": ""
             },
             "require": {
@@ -10679,20 +10605,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-23T08:31:43+00:00"
+            "time": "2020-08-12T06:20:35+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v4.4.11",
+            "version": "v4.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "0bc6184e78cd73abb0820e160a202c3989409631"
+                "reference": "8c6395686d3f203caf3ba4d29182f8c69809d8bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/0bc6184e78cd73abb0820e160a202c3989409631",
-                "reference": "0bc6184e78cd73abb0820e160a202c3989409631",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/8c6395686d3f203caf3ba4d29182f8c69809d8bd",
+                "reference": "8c6395686d3f203caf3ba4d29182f8c69809d8bd",
                 "shasum": ""
             },
             "require": {
@@ -10758,11 +10684,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-23T08:31:43+00:00"
+            "time": "2020-08-28T16:19:28+00:00"
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v4.4.11",
+            "version": "v4.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -10826,16 +10752,16 @@
         },
         {
             "name": "symfony/web-profiler-bundle",
-            "version": "v4.4.11",
+            "version": "v4.4.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/web-profiler-bundle.git",
-                "reference": "c946a250ac41542c481265d8e958d62cf5a172c9"
+                "reference": "9dbfc8cd80b6058310f3bd423c194f6da0c09116"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/c946a250ac41542c481265d8e958d62cf5a172c9",
-                "reference": "c946a250ac41542c481265d8e958d62cf5a172c9",
+                "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/9dbfc8cd80b6058310f3bd423c194f6da0c09116",
+                "reference": "9dbfc8cd80b6058310f3bd423c194f6da0c09116",
                 "shasum": ""
             },
             "require": {
@@ -10902,7 +10828,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-23T08:31:43+00:00"
+            "time": "2020-08-10T07:27:51+00:00"
         },
         {
             "name": "tecnickcom/tcpdf",
@@ -11076,6 +11002,9 @@
         "ext-tokenizer": "*",
         "ext-xmlwriter": "*",
         "ext-openssl": "*"
+    },
+    "platform-overrides": {
+        "php": "7.2.9"
     },
     "plugin-api-version": "1.1.0"
 }
