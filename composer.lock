@@ -232,16 +232,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.9.2",
+            "version": "1.10.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "7a04aa0201ddaa0b3cf64d41022bd8cdcd7fafeb"
+                "reference": "32966a3b1d48bc01472a8321fd6472b44fad033a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/7a04aa0201ddaa0b3cf64d41022bd8cdcd7fafeb",
-                "reference": "7a04aa0201ddaa0b3cf64d41022bd8cdcd7fafeb",
+                "url": "https://api.github.com/repos/composer/composer/zipball/32966a3b1d48bc01472a8321fd6472b44fad033a",
+                "reference": "32966a3b1d48bc01472a8321fd6472b44fad033a",
                 "shasum": ""
             },
             "require": {
@@ -249,22 +249,22 @@
                 "composer/semver": "^1.0",
                 "composer/spdx-licenses": "^1.2",
                 "composer/xdebug-handler": "^1.1",
-                "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
+                "justinrainbow/json-schema": "^5.2.10",
                 "php": "^5.3.2 || ^7.0",
                 "psr/log": "^1.0",
                 "seld/jsonlint": "^1.4",
                 "seld/phar-utils": "^1.0",
-                "symfony/console": "^2.7 || ^3.0 || ^4.0",
-                "symfony/filesystem": "^2.7 || ^3.0 || ^4.0",
-                "symfony/finder": "^2.7 || ^3.0 || ^4.0",
-                "symfony/process": "^2.7 || ^3.0 || ^4.0"
+                "symfony/console": "^2.7 || ^3.0 || ^4.0 || ^5.0",
+                "symfony/filesystem": "^2.7 || ^3.0 || ^4.0 || ^5.0",
+                "symfony/finder": "^2.7 || ^3.0 || ^4.0 || ^5.0",
+                "symfony/process": "^2.7 || ^3.0 || ^4.0 || ^5.0"
             },
             "conflict": {
                 "symfony/console": "2.8.38"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7",
-                "phpunit/phpunit-mock-objects": "^2.3 || ^3.0"
+                "phpspec/prophecy": "^1.10",
+                "symfony/phpunit-bridge": "^4.2"
             },
             "suggest": {
                 "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
@@ -277,7 +277,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.9-dev"
+                    "dev-master": "1.10-dev"
                 }
             },
             "autoload": {
@@ -308,7 +308,21 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-01-14T15:30:32+00:00"
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-08-03T09:35:19+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -1188,16 +1202,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "2.1.19",
+            "version": "2.1.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "840d5603eb84cc81a6a0382adac3293e57c1c64c"
+                "reference": "f46887bc48db66c7f38f668eb7d6ae54583617ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/840d5603eb84cc81a6a0382adac3293e57c1c64c",
-                "reference": "840d5603eb84cc81a6a0382adac3293e57c1c64c",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/f46887bc48db66c7f38f668eb7d6ae54583617ff",
+                "reference": "f46887bc48db66c7f38f668eb7d6ae54583617ff",
                 "shasum": ""
             },
             "require": {
@@ -1242,7 +1256,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2020-08-08T21:28:19+00:00"
+            "time": "2020-09-06T13:44:32+00:00"
         },
         {
             "name": "elasticsearch/elasticsearch",
@@ -1771,16 +1785,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.11.1",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "bb959e91bd8ffbd352ab76cbf11d656ce6435088"
+                "reference": "74cad289014f7ef747618480f6b59f6303357f34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/bb959e91bd8ffbd352ab76cbf11d656ce6435088",
-                "reference": "bb959e91bd8ffbd352ab76cbf11d656ce6435088",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/74cad289014f7ef747618480f6b59f6303357f34",
+                "reference": "74cad289014f7ef747618480f6b59f6303357f34",
                 "shasum": ""
             },
             "require": {
@@ -1819,20 +1833,20 @@
                 "google",
                 "oauth2"
             ],
-            "time": "2020-07-27T18:33:35+00:00"
+            "time": "2020-09-08T16:33:56+00:00"
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.38.0",
+            "version": "v1.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "5379a3a2ffae2b6ad7eb55a4fa56acdd694a460e"
+                "reference": "f9e7421beac89fd7d9006a13a6b39b89dd86c92e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/5379a3a2ffae2b6ad7eb55a4fa56acdd694a460e",
-                "reference": "5379a3a2ffae2b6ad7eb55a4fa56acdd694a460e",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/f9e7421beac89fd7d9006a13a6b39b89dd86c92e",
+                "reference": "f9e7421beac89fd7d9006a13a6b39b89dd86c92e",
                 "shasum": ""
             },
             "require": {
@@ -1880,7 +1894,7 @@
                 "Apache-2.0"
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
-            "time": "2020-07-21T18:59:47+00:00"
+            "time": "2020-09-08T20:52:20+00:00"
         },
         {
             "name": "google/cloud-storage",
@@ -2958,6 +2972,76 @@
                 "psr-7"
             ],
             "time": "2019-09-05T13:24:16+00:00"
+        },
+        {
+            "name": "ocramius/proxy-manager",
+            "version": "2.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ocramius/ProxyManager.git",
+                "reference": "4d154742e31c35137d5374c998e8f86b54db2e2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/4d154742e31c35137d5374c998e8f86b54db2e2f",
+                "reference": "4d154742e31c35137d5374c998e8f86b54db2e2f",
+                "shasum": ""
+            },
+            "require": {
+                "ocramius/package-versions": "^1.1.3",
+                "php": "^7.2.0",
+                "zendframework/zend-code": "^3.3.0"
+            },
+            "require-dev": {
+                "couscous/couscous": "^1.6.1",
+                "ext-phar": "*",
+                "humbug/humbug": "1.0.0-RC.0@RC",
+                "nikic/php-parser": "^3.1.1",
+                "padraic/phpunit-accelerator": "dev-master@DEV",
+                "phpbench/phpbench": "^0.12.2",
+                "phpstan/phpstan": "dev-master#856eb10a81c1d27c701a83f167dc870fd8f4236a as 0.9.999",
+                "phpstan/phpstan-phpunit": "dev-master#5629c0a1f4a9c417cb1077cf6693ad9753895761",
+                "phpunit/phpunit": "^6.4.3",
+                "squizlabs/php_codesniffer": "^2.9.1"
+            },
+            "suggest": {
+                "ocramius/generated-hydrator": "To have very fast object to array to object conversion for ghost objects",
+                "zendframework/zend-json": "To have the JsonRpc adapter (Remote Object feature)",
+                "zendframework/zend-soap": "To have the Soap adapter (Remote Object feature)",
+                "zendframework/zend-xmlrpc": "To have the XmlRpc adapter (Remote Object feature)"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "ProxyManager\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com",
+                    "homepage": "http://ocramius.github.io/"
+                }
+            ],
+            "description": "A library providing utilities to generate, instantiate and generally operate with Object Proxies",
+            "homepage": "https://github.com/Ocramius/ProxyManager",
+            "keywords": [
+                "aop",
+                "lazy loading",
+                "proxy",
+                "proxy pattern",
+                "service proxies"
+            ],
+            "time": "2019-08-10T08:37:15+00:00"
         },
         {
             "name": "ongr/elasticsearch-dsl",
@@ -4184,16 +4268,16 @@
         },
         {
             "name": "shopware/administration",
-            "version": "6.3.0.2",
+            "version": "6.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shopware/administration.git",
-                "reference": "b676e1a6ce0221d63707449cb52fe7ea8a8f5312"
+                "reference": "ac10ea53482027ec742cfbed66c07278f1dd9e89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shopware/administration/zipball/b676e1a6ce0221d63707449cb52fe7ea8a8f5312",
-                "reference": "b676e1a6ce0221d63707449cb52fe7ea8a8f5312",
+                "url": "https://api.github.com/repos/shopware/administration/zipball/ac10ea53482027ec742cfbed66c07278f1dd9e89",
+                "reference": "ac10ea53482027ec742cfbed66c07278f1dd9e89",
                 "shasum": ""
             },
             "require": {
@@ -4219,26 +4303,26 @@
                 "MIT"
             ],
             "description": "Administration frontend for the Shopware Core",
-            "time": "2020-08-19T02:24:08+00:00"
+            "time": "2020-09-08T08:13:58+00:00"
         },
         {
             "name": "shopware/core",
-            "version": "6.3.0.2",
+            "version": "6.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shopware/core.git",
-                "reference": "ff26ec0efdca2ed38f809623c7ee9b805eefb3f6"
+                "reference": "f74d15148d7aeb5668cd2a61929090877d47212f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shopware/core/zipball/ff26ec0efdca2ed38f809623c7ee9b805eefb3f6",
-                "reference": "ff26ec0efdca2ed38f809623c7ee9b805eefb3f6",
+                "url": "https://api.github.com/repos/shopware/core/zipball/f74d15148d7aeb5668cd2a61929090877d47212f",
+                "reference": "f74d15148d7aeb5668cd2a61929090877d47212f",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-sdk-php": "3.133.6",
                 "cocur/slugify": "4.0.0",
-                "composer/composer": "1.9.2",
+                "composer/composer": "1.10.10",
                 "composer/semver": "1.5.1",
                 "doctrine/annotations": "1.8.0",
                 "doctrine/dbal": "2.10.1",
@@ -4305,6 +4389,7 @@
                 "symfony/process": "4.4.4",
                 "symfony/property-access": "4.4.4",
                 "symfony/property-info": "4.4.4",
+                "symfony/proxy-manager-bridge": "4.4.4",
                 "symfony/psr-http-message-bridge": "2.0.0",
                 "symfony/routing": "4.4.4",
                 "symfony/security-core": "4.4.4",
@@ -4336,6 +4421,7 @@
                 "league/flysystem-memory": "1.0.2",
                 "mbezhanov/faker-provider-collection": "1.2.1",
                 "nikic/php-parser": "4.3.0",
+                "opis/json-schema": "1.0.19",
                 "phpunit/phpunit": "8.5.2",
                 "smalot/pdfparser": "0.14.0",
                 "symfony/browser-kit": "4.4.4",
@@ -4357,15 +4443,7 @@
                 ],
                 "psr-4": {
                     "Shopware\\Core\\": ""
-                },
-                "files": [
-                    "Flag/feature_next733.php",
-                    "Flag/feature_next1797.php",
-                    "Flag/feature_next3722.php",
-                    "Flag/feature_next6009.php",
-                    "Flag/feature_next6997.php",
-                    "Flag/feature_next9225.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -4377,20 +4455,20 @@
                 "shop",
                 "shopware"
             ],
-            "time": "2020-08-19T02:24:08+00:00"
+            "time": "2020-09-08T08:13:58+00:00"
         },
         {
             "name": "shopware/elasticsearch",
-            "version": "6.3.0.2",
+            "version": "6.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shopware/elasticsearch.git",
-                "reference": "aeae60e86a3de1c563a02ab41ea09b1ba07a1544"
+                "reference": "a45b697c505fbfdf53c596f8c0fb3b826b3bb038"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shopware/elasticsearch/zipball/aeae60e86a3de1c563a02ab41ea09b1ba07a1544",
-                "reference": "aeae60e86a3de1c563a02ab41ea09b1ba07a1544",
+                "url": "https://api.github.com/repos/shopware/elasticsearch/zipball/a45b697c505fbfdf53c596f8c0fb3b826b3bb038",
+                "reference": "a45b697c505fbfdf53c596f8c0fb3b826b3bb038",
                 "shasum": ""
             },
             "require": {
@@ -4425,7 +4503,7 @@
                 "MIT"
             ],
             "description": "Elasticsearch for Shopware",
-            "time": "2020-08-19T02:24:08+00:00"
+            "time": "2020-09-08T08:13:58+00:00"
         },
         {
             "name": "shopware/paas",
@@ -4466,16 +4544,16 @@
         },
         {
             "name": "shopware/recovery",
-            "version": "6.3.0.2",
+            "version": "6.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shopware/recovery.git",
-                "reference": "4d922a975a0a622a8845a92daa2f2d43ca89a0e7"
+                "reference": "d3c20a9251584b051b9fdc9fab4285d324fbd251"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shopware/recovery/zipball/4d922a975a0a622a8845a92daa2f2d43ca89a0e7",
-                "reference": "4d922a975a0a622a8845a92daa2f2d43ca89a0e7",
+                "url": "https://api.github.com/repos/shopware/recovery/zipball/d3c20a9251584b051b9fdc9fab4285d324fbd251",
+                "reference": "d3c20a9251584b051b9fdc9fab4285d324fbd251",
                 "shasum": ""
             },
             "require": {
@@ -4495,20 +4573,20 @@
                 "MIT"
             ],
             "description": "Recovery for Shopware",
-            "time": "2020-08-19T02:24:08+00:00"
+            "time": "2020-09-08T08:13:58+00:00"
         },
         {
             "name": "shopware/storefront",
-            "version": "6.3.0.2",
+            "version": "6.3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shopware/storefront.git",
-                "reference": "6d254ed7703d218d67af0f5677f3f02767e7640e"
+                "reference": "b4ec438cd96ea9cb61a671780cb725854e9ef176"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shopware/storefront/zipball/6d254ed7703d218d67af0f5677f3f02767e7640e",
-                "reference": "6d254ed7703d218d67af0f5677f3f02767e7640e",
+                "url": "https://api.github.com/repos/shopware/storefront/zipball/b4ec438cd96ea9cb61a671780cb725854e9ef176",
+                "reference": "b4ec438cd96ea9cb61a671780cb725854e9ef176",
                 "shasum": ""
             },
             "require": {
@@ -4561,7 +4639,7 @@
                 "MIT"
             ],
             "description": "Storefront for Shopware",
-            "time": "2020-08-19T02:24:08+00:00"
+            "time": "2020-09-08T08:13:58+00:00"
         },
         {
             "name": "sroze/messenger-enqueue-transport",
@@ -5955,7 +6033,7 @@
         },
         {
             "name": "symfony/intl",
-            "version": "v5.1.4",
+            "version": "v5.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/intl.git",
@@ -7394,6 +7472,63 @@
             "time": "2020-01-04T13:00:46+00:00"
         },
         {
+            "name": "symfony/proxy-manager-bridge",
+            "version": "v4.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/proxy-manager-bridge.git",
+                "reference": "11eacb5977f59ece584c0945e0505f0b6edbe1c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/proxy-manager-bridge/zipball/11eacb5977f59ece584c0945e0505f0b6edbe1c0",
+                "reference": "11eacb5977f59ece584c0945e0505f0b6edbe1c0",
+                "shasum": ""
+            },
+            "require": {
+                "ocramius/proxy-manager": "~2.1",
+                "php": "^7.1.3",
+                "symfony/dependency-injection": "^4.0|^5.0"
+            },
+            "conflict": {
+                "zendframework/zend-eventmanager": "2.6.0"
+            },
+            "require-dev": {
+                "symfony/config": "^3.4|^4.0|^5.0"
+            },
+            "type": "symfony-bridge",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Bridge\\ProxyManager\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony ProxyManager Bridge",
+            "homepage": "https://symfony.com",
+            "time": "2020-01-04T13:00:46+00:00"
+        },
+        {
             "name": "symfony/psr-http-message-bridge",
             "version": "v2.0.0",
             "source": {
@@ -7806,7 +7941,7 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.1.4",
+            "version": "v5.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
@@ -8359,7 +8494,7 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v4.4.12",
+            "version": "v4.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
@@ -8785,6 +8920,119 @@
                 "templating"
             ],
             "time": "2019-12-28T07:12:03+00:00"
+        },
+        {
+            "name": "zendframework/zend-code",
+            "version": "3.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-code.git",
+                "reference": "268040548f92c2bfcba164421c1add2ba43abaaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/268040548f92c2bfcba164421c1add2ba43abaaa",
+                "reference": "268040548f92c2bfcba164421c1add2ba43abaaa",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1",
+                "zendframework/zend-eventmanager": "^2.6 || ^3.0"
+            },
+            "conflict": {
+                "phpspec/prophecy": "<1.9.0"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^1.7",
+                "ext-phar": "*",
+                "phpunit/phpunit": "^7.5.16 || ^8.4",
+                "zendframework/zend-coding-standard": "^1.0",
+                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+            },
+            "suggest": {
+                "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
+                "zendframework/zend-stdlib": "Zend\\Stdlib component"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4.x-dev",
+                    "dev-develop": "3.5.x-dev",
+                    "dev-dev-4.0": "4.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Code\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Extensions to the PHP Reflection API, static code scanning, and code generation",
+            "keywords": [
+                "ZendFramework",
+                "code",
+                "zf"
+            ],
+            "abandoned": "laminas/laminas-code",
+            "time": "2019-12-10T19:21:15+00:00"
+        },
+        {
+            "name": "zendframework/zend-eventmanager",
+            "version": "3.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-eventmanager.git",
+                "reference": "a5e2583a211f73604691586b8406ff7296a946dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/a5e2583a211f73604691586b8406ff7296a946dd",
+                "reference": "a5e2583a211f73604691586b8406ff7296a946dd",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "athletic/athletic": "^0.1",
+                "container-interop/container-interop": "^1.1.0",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+                "zendframework/zend-coding-standard": "~1.0.0",
+                "zendframework/zend-stdlib": "^2.7.3 || ^3.0"
+            },
+            "suggest": {
+                "container-interop/container-interop": "^1.1.0, to use the lazy listeners feature",
+                "zendframework/zend-stdlib": "^2.7.3 || ^3.0, to use the FilterChain feature"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2-dev",
+                    "dev-develop": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\EventManager\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Trigger and listen to events within a PHP application",
+            "homepage": "https://github.com/zendframework/zend-eventmanager",
+            "keywords": [
+                "event",
+                "eventmanager",
+                "events",
+                "zf2"
+            ],
+            "abandoned": "laminas/laminas-eventmanager",
+            "time": "2018-04-25T15:33:34+00:00"
         },
         {
             "name": "zircote/swagger-php",
@@ -10545,7 +10793,7 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v4.4.12",
+            "version": "v4.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
@@ -10618,7 +10866,7 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v4.4.12",
+            "version": "v4.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
@@ -10693,16 +10941,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v4.4.12",
+            "version": "v4.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "8c6395686d3f203caf3ba4d29182f8c69809d8bd"
+                "reference": "bba78ce46a13a8d761f6330c718924dc6ca7d3b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/8c6395686d3f203caf3ba4d29182f8c69809d8bd",
-                "reference": "8c6395686d3f203caf3ba4d29182f8c69809d8bd",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/bba78ce46a13a8d761f6330c718924dc6ca7d3b0",
+                "reference": "bba78ce46a13a8d761f6330c718924dc6ca7d3b0",
                 "shasum": ""
             },
             "require": {
@@ -10768,11 +11016,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-28T16:19:28+00:00"
+            "time": "2020-09-01T09:34:43+00:00"
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v4.4.12",
+            "version": "v4.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -10836,7 +11084,7 @@
         },
         {
             "name": "symfony/web-profiler-bundle",
-            "version": "v4.4.12",
+            "version": "v4.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/web-profiler-bundle.git",

@@ -4,6 +4,7 @@
     only:
         refs:
             - schedules
+            - tags
     services:
         -   name: mariadb:10.3
             alias: mysql
@@ -28,7 +29,7 @@
         SHOPWARE_ES_INDEX_PREFIX: sw
         GIT_STRATEGY: none
     before_script:
-        - export TAG=$(cat artifacts/TAG)
+        - export TAG=${CI_COMMIT_TAG:-$(cat artifacts/TAG)}
         - cp artifacts/install*.tar.xz install.tar.xz
         - tar -xf install.tar.xz
         - rm install.tar.xz
@@ -67,7 +68,7 @@
             alias: elasticsearch
             command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
     cache:
-        key: "e2e_$PLATFORM_BRANCH"
+        key: "e2e_$CI_COMMIT_BRANCH"
         paths:
             - .npm
             - .cypress
@@ -86,7 +87,7 @@
         - rm -Rf $(ls -a | grep -vE '^(\.gitlab-ci|\.cypress|\.npm|artifacts|\.\.?)$') || true
         - npm config set cache $PWD/.npm
         - export CYPRESS_CACHE_FOLDER="${PWD}/.cypress"
-        - export TAG=$(cat artifacts/TAG)
+        - export TAG=${CI_COMMIT_TAG:-$(cat artifacts/TAG)}
         - '[[ -n $E2E_INSTALL_PACKAGE_URL && -n $E2E_TEST_DATA_FILE ]]'
         - curl ${E2E_INSTALL_PACKAGE_URL} --silent -o install
         - 'if [ ${E2E_INSTALL_PACKAGE_URL: -4} == ".zip" ]; then unzip -qqo install; else tar -xf install; fi'
@@ -100,14 +101,20 @@
         # set update api base url to mock
         - >
             mysql -h mysql -u root -proot sw6_e2e_test -e 'UPDATE system_config SET configuration_value = "{\"_value\": \"http://localhost:3000\"}" WHERE configuration_key IN("core.store.apiUri", "core.update.apiUri")'
+        # migrate up to current version
+        - bin/console database:migrate --all core
         - bin/console system:generate-jwt-secret
         - bin/console assets:install
+        - bin/console dal:refresh:index
+        - bin/console cache:clear
         - npm --prefix .gitlab-ci/e2e/ ci
         # start update api mock
-        - DEBUG=* UPDATE_FILE_PATH=$CI_PROJECT_DIR/artifacts/update.zip FAKE_VERSION=$TAG node .gitlab-ci/e2e/update-api-mock.js &
+        - DEBUG=* UPDATE_FILE_PATH=$CI_PROJECT_DIR/artifacts/update.zip node .gitlab-ci/e2e/update-api-mock.js &
         # start webserver
         - /entrypoint supervisord > /dev/null 2>&1 &
         - apt-get update && apt-get install -y xvfb
+        # make sure that chrome uses latest version
+        - apt-get -fy --only-upgrade install google-chrome-stable
         # get e2e from install archive
         - mkdir .gitlab-ci/e2e/test
         - cp artifacts/install*.tar.xz .gitlab-ci/e2e/test/install.tar.xz

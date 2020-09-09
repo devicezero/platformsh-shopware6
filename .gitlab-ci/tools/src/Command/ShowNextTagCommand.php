@@ -2,18 +2,14 @@
 
 namespace Shopware\CI\Command;
 
-use Composer\Semver\Semver;
-use Composer\Semver\VersionParser;
-use Shopware\CI\Service\TaggingService;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ShowNextTagCommand extends Command
+class ShowNextTagCommand extends ReleaseCommand
 {
-    public static $defaultName = 'show-next-tag';
+    public static $defaultName = 'release:show-next-tag';
 
     protected function configure(): void
     {
@@ -22,6 +18,7 @@ class ShowNextTagCommand extends Command
             ->addArgument('repository', InputArgument::OPTIONAL, 'Repository path')
             ->addOption('constraint', null, InputOption::VALUE_REQUIRED, 'Version constraint')
             ->addOption('minimum-stability', null, InputOption::VALUE_REQUIRED, 'Release stability')
+            ->addOption('minor-release', null, InputOption::VALUE_NONE, 'Is minor release')
         ;
     }
 
@@ -37,18 +34,15 @@ class ShowNextTagCommand extends Command
             $constraint = $composerJson['require']['shopware/core'];
         }
 
-        $minimumStability = $input->getOption('minimum-stability');
-        if (!$minimumStability) {
-            $minimumStability = $composerJson['minimum-stability'];
-        }
-
-        $taggingService = new TaggingService(new VersionParser(), $minimumStability);
+        $versioningService = $this->getVersioningService($input, $output);
         $tags = self::getTags($repository);
-        $matchingVersions = $taggingService->getMatchingVersions($tags, $constraint);
+        $matchingVersions = $versioningService->getMatchingVersions($tags, $constraint);
 
         $lastVersion = array_pop($matchingVersions);
 
-        $output->writeln($taggingService->getNextTag($constraint, $lastVersion));
+        $nextTag = $versioningService->getNextTag($constraint, $lastVersion, $this->isMinorRelease($input));
+
+        $output->writeln($nextTag);
 
         return 0;
     }
@@ -76,5 +70,14 @@ class ShowNextTagCommand extends Command
         }
 
         return $rootDir;
+    }
+
+    private function isMinorRelease(InputInterface $input): bool
+    {
+        return ($input->hasOption('minor-release') && $input->getOption('minor-release'))
+            || (isset($_SERVER['MINOR_RELEASE']) && $_SERVER['MINOR_RELEASE'] !== 'false'
+            && $_SERVER['MINOR_RELEASE'] !== 0
+            && $_SERVER['MINOR_RELEASE'] !== '0'
+            && trim($_SERVER['MINOR_RELEASE']) !== '');
     }
 }
