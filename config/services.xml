@@ -8,9 +8,14 @@
     </imports>
 
     <services>
+        <service id="Redis" class="Redis">
+            <call method="connect">
+                <argument>rediscache.internal</argument>
+                <argument>6379</argument>
+            </call>
+        </service>
         <service id="Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler">
-            <argument>%env(string:REDIS_URL)%</argument>
-            <factory class="Symfony\Component\HttpFoundation\Session\Storage\Handler\SessionHandlerFactory" method="createHandler"/>
+            <argument type="service" id="Redis"/>
         </service>
     </services>
 </container>
