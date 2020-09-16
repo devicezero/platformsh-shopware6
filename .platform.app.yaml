@@ -148,6 +148,9 @@ mounts:
     "/installer":
         source: local
         source_path: "installer"
+    "/.global/cache":
+        source: local
+        source_path: "global/cache"
 
 # The configuration of app when it is exposed to the web.
 web:
