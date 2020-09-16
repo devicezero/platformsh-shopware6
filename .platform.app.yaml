@@ -27,6 +27,7 @@ runtime:
         - mbstring
         - fileinfo
         - intl
+        - redis
 
 # The hooks that will be performed when the package is deployed.
 hooks:
@@ -40,9 +41,6 @@ hooks:
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm current
         nvm install 12
-
-        # Add the Redis extension.
-        bash install-redis.sh 5.1.1
 
         # Disable UI installer
         touch install.lock
