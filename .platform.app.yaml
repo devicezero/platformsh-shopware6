@@ -158,6 +158,10 @@ web:
             root: "public"
             # The front-controller script to send non-static requests to.
             passthru: "/index.php"
+            expires: 24h
+            rules:
+                \.(css|js|gif|jpe?g|png|ttf|eot|woff2?|otf|cast|mp4|json|yaml|ico|svg?|cast|mp4|json|yaml|svg?|ttf)$:
+                    expires: 4w
 
 workers:
     queue:
