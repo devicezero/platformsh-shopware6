@@ -7,3 +7,6 @@
     type: upstream
     id: shopware
     upstream: "app:http"
+    cache:
+        enabled: true
+        cookies: ['/^SS?ESS/']
