@@ -76,6 +76,9 @@ hooks:
             echo "Running system:generate-jwt-secret"
             bin/console system:generate-jwt-secret
 
+            # compile theme
+            bin/console theme:compile
+
             # refresh plugins and enable PaaS Plugin
             bin/console plugin:refresh
             bin/console plugin:install --activate SwagPaas
