@@ -15,6 +15,8 @@ variables:
         SHOPWARE_ENV: 'prod'
         # Instance ID is empty by default, change to something unique in your project
         INSTANCE_ID: ''
+        # Make sure Symfony HTTP Cache is disabled, we used Redis instead
+        SHOPWARE_HTTP_CACHE_ENABLED: 0
     php:
         upload_max_filesize: 6M
 
@@ -59,6 +61,7 @@ hooks:
         if [ "$PLATFORM_BRANCH" != "master" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
             bin/console sales-channel:update-domain "$FRONTEND_URL"
+            bin/console theme:compile
         fi
 
         # Initialize the Shopware site's data set if it's not already installed.
