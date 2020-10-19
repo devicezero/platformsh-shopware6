@@ -12,11 +12,14 @@ build:
 variables:
     env:
         # Tell Shopware to always install in production-mode.
-        SHOPWARE_ENV: 'prod'
+        SHOPWARE_ENV: prod
         # Instance ID is empty by default, change to something unique in your project
         INSTANCE_ID: ''
         # Make sure Symfony HTTP Cache is disabled, we used Redis instead
         SHOPWARE_HTTP_CACHE_ENABLED: 0
+        # NVM and Node.js versions to install
+        NVM_VERSION: v0.36.0
+        NODE_VERSION: v12.19.0
     php:
         upload_max_filesize: 6M
 
@@ -38,11 +41,16 @@ hooks:
 
         # install nvm
         unset NPM_CONFIG_PREFIX
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | dash
         export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
+        # install.sh will automatically install NodeJS based on the presence of $NODE_VERSION
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        nvm current
-        nvm install 12
+
+        # have nvm available and load the correct node version in your ssh session
+        echo 'unset NPM_CONFIG_PREFIX' >> .bash_profile
+        echo 'export NO_UPDATE_NOTIFIER=1' >> .bash_profile
+        echo 'export NVM_DIR="$PLATFORM_APP_DIR/.nvm"' >> .bash_profile
+        echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> .bash_profile
 
         # Disable UI installer
         touch install.lock
@@ -50,11 +58,9 @@ hooks:
     deploy: |
         set -e
 
-        # This is necessary for nvm to work.
+        # load nvm to use the correct node version for any following commands
         unset NPM_CONFIG_PREFIX
-        # Disable npm update notifier; being a read only system it will probably annoy you.
         export NO_UPDATE_NOTIFIER=1
-        # This loads nvm for general usage.
         export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
