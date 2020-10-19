@@ -20,7 +20,6 @@ variables:
         # NVM and Node.js versions to install
         NVM_VERSION: v0.36.0
         NODE_VERSION: v12.19.0
-        NVM_DIR: $LATFORM_APP_DIR/.nvm
     php:
         upload_max_filesize: 6M
 
@@ -53,13 +52,9 @@ hooks:
     deploy: |
         set -e
 
-        # This is necessary for nvm to work.
-        unset NPM_CONFIG_PREFIX
-        # Disable npm update notifier; being a read only system it will probably annoy you.
-        export NO_UPDATE_NOTIFIER=1
-        # This loads nvm for general usage.
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        nvm use 12
+        bash nvm-setup.sh
+        # Add the above command to `.bash_profile` so that it is available during SSH sessions
+        echo "bash nvm-setup.sh" >> ~/.bash_profile
 
         if [ "$PLATFORM_BRANCH" != "master" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
