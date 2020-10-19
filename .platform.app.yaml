@@ -12,7 +12,7 @@ build:
 variables:
     env:
         # Tell Shopware to always install in production-mode.
-        SHOPWARE_ENV: 'prod'
+        SHOPWARE_ENV: prod
         # Instance ID is empty by default, change to something unique in your project
         INSTANCE_ID: ''
         # Make sure Symfony HTTP Cache is disabled, we used Redis instead
@@ -20,6 +20,7 @@ variables:
         # NVM and Node.js versions to install
         NVM_VERSION: v0.36.0
         NODE_VERSION: v12.19.0
+        NVM_DIR: $LATFORM_APP_DIR/.nvm
     php:
         upload_max_filesize: 6M
 
@@ -57,7 +58,6 @@ hooks:
         # Disable npm update notifier; being a read only system it will probably annoy you.
         export NO_UPDATE_NOTIFIER=1
         # This loads nvm for general usage.
-        export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
         nvm use 12
 
