@@ -52,9 +52,13 @@ hooks:
     deploy: |
         set -e
 
-        bash nvm-setup.sh
-        # Add the above command to `.bash_profile` so that it is available during SSH sessions
-        echo "bash nvm-setup.sh" >> ~/.bash_profile
+        # This is necessary for nvm to work.
+        unset NPM_CONFIG_PREFIX
+        # Disable npm update notifier; being a read only system it will probably annoy you.
+        export NO_UPDATE_NOTIFIER=1
+        # This loads nvm for general usage.
+        export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
         if [ "$PLATFORM_BRANCH" != "master" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
