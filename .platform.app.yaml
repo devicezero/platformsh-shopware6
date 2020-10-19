@@ -46,17 +46,21 @@ hooks:
         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+        # have nvm available and load the correct node version in your ssh session
+        echo 'unset NPM_CONFIG_PREFIX' >> .bash_profile
+        echo 'export NO_UPDATE_NOTIFIER=1' >> .bash_profile
+        echo 'export NVM_DIR="$PLATFORM_APP_DIR/.nvm"' >> .bash_profile
+        echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> .bash_profile
+
         # Disable UI installer
         touch install.lock
 
     deploy: |
         set -e
 
-        # This is necessary for nvm to work.
+        # load nvm to use the correct node version for any following commands
         unset NPM_CONFIG_PREFIX
-        # Disable npm update notifier; being a read only system it will probably annoy you.
         export NO_UPDATE_NOTIFIER=1
-        # This loads nvm for general usage.
         export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
