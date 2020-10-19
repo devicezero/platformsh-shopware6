@@ -17,6 +17,9 @@ variables:
         INSTANCE_ID: ''
         # Make sure Symfony HTTP Cache is disabled, we used Redis instead
         SHOPWARE_HTTP_CACHE_ENABLED: 0
+        # NVM and Node.js versions to install
+        NVM_VERSION: v0.36.0
+        NODE_VERSION: v12.19.0
     php:
         upload_max_filesize: 6M
 
@@ -38,11 +41,10 @@ hooks:
 
         # install nvm
         unset NPM_CONFIG_PREFIX
-        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.35.3/install.sh | dash
         export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
+        # install.sh will automatically install NodeJS based on the presence of $NODE_VERSION
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-        nvm current
-        nvm install 12
 
         # Disable UI installer
         touch install.lock
