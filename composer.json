@@ -32,7 +32,10 @@
     "autoload": {
         "psr-4": {
             "Shopware\\Production\\": "src/"
-        }
+        },
+        "files": [
+            "platformsh-env.php"
+        ]
     },
     "repositories": [
         {
