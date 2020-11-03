@@ -17,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SystemSetupCommand extends Command
 {
-    static public $defaultName = 'system:setup';
+    public static $defaultName = 'system:setup';
 
     /**
      * @var string
@@ -52,7 +52,7 @@ class SystemSetupCommand extends Command
             'SHOPWARE_HTTP_DEFAULT_TTL' => '7200',
             'SHOPWARE_CDN_STRATEGY_DEFAULT' => 'id',
             'BLUE_GREEN_DEPLOYMENT' => 1,
-            'MAILER_URL' => 'smtp://localhost:25?encryption=&auth_mode='
+            'MAILER_URL' => 'smtp://localhost:25?encryption=&auth_mode=',
         ];
 
         $io = new SymfonyStyle($input, $output);
@@ -62,6 +62,7 @@ class SystemSetupCommand extends Command
 
         if (!$input->getOption('force') && file_exists($this->projectDir . '/.env')) {
             $io->comment('Instance has already been set-up. To start over, please delete your .env file.');
+
             return 0;
         }
 
@@ -172,7 +173,6 @@ class SystemSetupCommand extends Command
         $envVars = '';
         $envFile = $this->projectDir . '/.env';
 
-
         foreach ($configuration as $key => $value) {
             $envVars .= $key . '="' . str_replace('"', '\\"', $value) . '"' . PHP_EOL;
         }
@@ -202,6 +202,7 @@ class SystemSetupCommand extends Command
         // TODO: make it regenerate the public key if only private exists
         if (file_exists($jwtDir . '/private.pem') && !$input->getOption('force')) {
             $io->note('Private/Public key already exists. Skipping');
+
             return 0;
         }
 
@@ -223,8 +224,6 @@ class SystemSetupCommand extends Command
         }
 
         $ret = $command->run(new ArrayInput($parameters, $command->getDefinition()), $io);
-
-
 
         return $ret;
     }

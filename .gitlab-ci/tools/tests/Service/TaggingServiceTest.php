@@ -1,8 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Shopware\CI\Test\Service;
 
-use Composer\Semver\VersionParser;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Shopware\CI\Service\TaggingService;
@@ -42,11 +41,10 @@ CODE;
             $remotePath
         );
 
-        $tagSha = exec('git -C '  . $remotePath . ' rev-parse ' . escapeshellarg('v6.3.0.1-dev^{}'));
+        $tagSha = exec('git -C ' . $remotePath . ' rev-parse ' . escapeshellarg('v6.3.0.1-dev^{}'));
 
         static::assertSame($commitSha, $tagSha, 'Test repo: ' . $remotePath);
 
         system('rm -Rf ' . $remotePath);
     }
-
 }

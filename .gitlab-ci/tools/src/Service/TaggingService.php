@@ -1,16 +1,9 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace Shopware\CI\Service;
 
-
-use Composer\Semver\Constraint\Constraint;
-use Composer\Semver\Constraint\MultiConstraint;
-use Composer\Semver\Semver;
-use Composer\Semver\VersionParser;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
-use function Symfony\Component\VarDumper\Dumper\esc;
 
 class TaggingService
 {
@@ -132,15 +125,15 @@ CODE;
         }
     }
 
-    public function openMergeRequest(string $projectId, string $sourceBranch, string $targetBranch, string $title)
+    public function openMergeRequest(string $projectId, string $sourceBranch, string $targetBranch, string $title): void
     {
         $requestOptions = [
             RequestOptions::JSON => [
                 'id' => $projectId,
                 'source_branch' => $sourceBranch,
                 'target_branch' => $targetBranch,
-                'title' => $title
-            ]
+                'title' => $title,
+            ],
         ];
 
         $this->gitlabApiClient->request('POST', 'projects/' . $projectId . '/merge_requests', $requestOptions);

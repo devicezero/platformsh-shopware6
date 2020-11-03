@@ -2,10 +2,7 @@
 
 namespace Shopware\CI\Command;
 
-use GuzzleHttp\Client;
 use Shopware\CI\Service\ChangelogService;
-use Shopware\CI\Service\CredentialService;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

@@ -1,8 +1,6 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace Shopware\CI\Service;
-
 
 use Composer\Semver\VersionParser;
 
@@ -27,8 +25,7 @@ class ReleaseService
         array $config,
         ReleasePrepareService $releasePrepareService,
         TaggingService $taggingService
-    )
-    {
+    ) {
         $this->config = $config;
         $this->taggingService = $taggingService;
         $this->releasePrepareService = $releasePrepareService;
@@ -88,20 +85,19 @@ class ReleaseService
         );
 
         $this->taggingService->openMergeRequest(
-            $this->config['projectId'],
+            (string) $this->config['projectId'],
             'release/' . $tag,
             $this->config['targetBranch'],
             'Release ' . $tag
         );
+    }
 
-        $platformRemote = '';
-        $platformSha = file_get_contents($this->config['projectRoot'] . '/PLATFORM_COMMIT_SHA');
-
-        $this->taggingService->tagAndPushPlatform(
-            $tag,
-            $platformSha,
-            $platformRemote
-        );
+    public function validatePackage(array $packageData, string $tag): bool
+    {
+        // if the composer.json contains a version like 6.3.0.0 it's also 6.3.0.0 in the composer.lock
+        // if it it does not contain a version, but is tagged in git, the version will be v6.3.0.0
+        return ltrim($packageData['version'], 'v') === ltrim($tag, 'v')
+            && ($packageData['dist']['type'] ?? null) !== 'path';
     }
 
     private function updateStability(string $composerJsonPath, string $stability): void
@@ -113,7 +109,7 @@ class ReleaseService
 
         if ($currentStability !== $newStability) {
             $composerJson['minimum-stability'] = $newStability;
-            $encoded = \json_encode($composerJson, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
+            $encoded = \json_encode($composerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             file_put_contents($composerJsonPath, $encoded);
         }
     }
@@ -133,7 +129,7 @@ class ReleaseService
         sleep($composerWaitTime);
 
         $max = 10;
-        for($i = 0; $i < $max; ++$i) {
+        for ($i = 0; $i < $max; ++$i) {
             sleep($composerWaitTime / 3);
 
             $cmd = 'cd ' . $dir . ' && rm -Rf vendor/shopware';
@@ -150,8 +146,9 @@ class ReleaseService
                 $repoData['reference'] = exec('git -C ' . escapeshellarg($repoData['path']) . ' rev-parse HEAD');
 
                 if (!$this->validatePackage($package, $tag)) {
-                    echo "retry! current packageData:" . PHP_EOL;
+                    echo 'retry! current packageData:' . PHP_EOL;
                     var_dump($package);
+
                     continue 2;
                 }
             }
@@ -173,13 +170,5 @@ class ReleaseService
         }
 
         return null;
-    }
-
-    public function validatePackage(array $packageData, string $tag): bool
-    {
-        // if the composer.json contains a version like 6.3.0.0 it's also 6.3.0.0 in the composer.lock
-        // if it it does not contain a version, but is tagged in git, the version will be v6.3.0.0
-        return ltrim($packageData['version'], 'v') === ltrim($tag, 'v')
-            && ($packageData['dist']['type'] ?? null) !== 'path';
     }
 }

@@ -1,8 +1,6 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace Shopware\CI\Command;
-
 
 use Aws\S3\S3MultiRegionClient;
 use Composer\Semver\VersionParser;
@@ -44,7 +42,7 @@ abstract class ReleaseCommand extends Command
             'projectId' => $_SERVER['CI_PROJECT_ID'] ?? '184',
             'gitlabRemoteUrl' => $_SERVER['CI_REPOSITORY_URL'] ?? 'git@gitlab.shopware.com:/shopware/6/product/production',
             'manyReposBaseUrl' => $_SERVER['MANY_REPO_BASE_URL'] ?? 'git@gitlab.shopware.com:shopware/6/product/many-repositories',
-            'projectRoot' => $_SERVER['PROJECT_ROOT']  ?? dirname(__DIR__, 4),
+            'projectRoot' => $_SERVER['PROJECT_ROOT'] ?? dirname(__DIR__, 4),
             'jira' => [
                 'api_base_uri' => rtrim($_SERVER['JIRA_API_V2_URL'] ?? 'https://jira.shopware.com/rest/api/2/', '/') . '/',
             ],
@@ -57,15 +55,13 @@ abstract class ReleaseCommand extends Command
                 'key' => $_SERVER['AWS_ACCESS_KEY_ID'] ?? '',
                 'secret' => $_SERVER['AWS_SECRET_ACCESS_KEY'] ?? '',
                 'bucket' => 'releases.s3.shopware.com',
-                'publicDomain' => 'https://releases.shopware.com'
+                'publicDomain' => 'https://releases.shopware.com',
             ],
             'updateApiHost' => $_SERVER['UPDATE_API_HOST'] ?? '',
             'gitlabApiToken' => $_SERVER['BOT_API_TOKEN'] ?? '',
             'isMinorRelease' => $_SERVER['MINOR_RELEASE'] ?? false,
-            'platformBranch' => $_SERVER['PLATFORM_BRANCH'] ?? null
+            'platformBranch' => $_SERVER['PLATFORM_BRANCH'] ?? null,
         ];
-
-
 
         if (isset($_SERVER['CI_API_V4_URL'])) {
             $config['gitlabBaseUri'] = rtrim($_SERVER['CI_API_V4_URL'] ?? '', '/') . '/'; // guzzle needs the slash
@@ -96,7 +92,7 @@ abstract class ReleaseCommand extends Command
         foreach ($repos as $repo) {
             $config['repos'][$repo] = [
                 'path' => $config['projectRoot'] . '/repos/' . $repo,
-                'remoteUrl' => $config['manyReposBaseUrl'] . '/' . $repo
+                'remoteUrl' => $config['manyReposBaseUrl'] . '/' . $repo,
             ];
         }
 
@@ -109,7 +105,7 @@ abstract class ReleaseCommand extends Command
 
         $jiraApiClient = new Client([
             'base_uri' => $config['jira']['api_base_uri'],
-            'auth' => [$config['jira']['username'], $config['jira']['password']]
+            'auth' => [$config['jira']['username'], $config['jira']['password']],
         ]);
 
         return new ChangelogService($jiraApiClient);
@@ -127,7 +123,7 @@ abstract class ReleaseCommand extends Command
             $s3Client = new S3MultiRegionClient([
                 'credentials' => [
                     'key' => $config['deployFilesystem']['key'],
-                    'secret' => $config['deployFilesystem']['secret']
+                    'secret' => $config['deployFilesystem']['secret'],
                 ],
                 'version' => 'latest',
             ]);
@@ -143,7 +139,6 @@ abstract class ReleaseCommand extends Command
     protected function getReleasePrepareService(InputInterface $input, OutputInterface $output): ReleasePrepareService
     {
         $config = $this->getConfig($input, $output);
-
 
         $artifactFilesystem = new Filesystem(new Local($config['projectRoot'] . '/artifacts'));
 
@@ -170,8 +165,8 @@ abstract class ReleaseCommand extends Command
             'base_uri' => $config['gitlabBaseUri'],
             'headers' => [
                 'Private-Token' => $config['gitlabApiToken'],
-                'Content-TYpe' => 'application/json'
-            ]
+                'Content-TYpe' => 'application/json',
+            ],
         ]);
 
         return new TaggingService($config, $gitlabApiClient);
