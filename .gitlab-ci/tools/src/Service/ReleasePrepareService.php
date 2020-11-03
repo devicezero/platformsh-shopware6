@@ -1,8 +1,6 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace Shopware\CI\Service;
-
 
 use League\Flysystem\Filesystem;
 use Shopware\CI\Service\Xml\Release;
@@ -42,8 +40,7 @@ class ReleasePrepareService
         FileSystem $artifactsFilesystem,
         ChangelogService $changelogService,
         UpdateApiService $updateApiService
-    )
-    {
+    ) {
         $this->config = $config;
         $this->deployFilesystem = $deployFilesystem;
         $this->changelogService = $changelogService;
@@ -68,7 +65,7 @@ class ReleasePrepareService
 
         $this->uploadArchives($release);
 
-        if($this->mayAlterChangelog($release)) {
+        if ($this->mayAlterChangelog($release)) {
             try {
                 $changelog = $this->changelogService->getChangeLog($tag);
                 $release->setLocales($changelog);
@@ -86,20 +83,21 @@ class ReleasePrepareService
 
     public function uploadArchives(Release $release): void
     {
-        $installUpload = $this->hashAndUpload($release->tag, 'install.zip');
+        $releaseTag = $release->getTag();
+        $installUpload = $this->hashAndUpload($releaseTag, 'install.zip');
         $release->download_link_install = $installUpload['url'];
         $release->sha1_install = $installUpload['sha1'];
         $release->sha256_install = $installUpload['sha256'];
 
-        $updateUpload = $this->hashAndUpload($release->tag, 'update.zip');
+        $updateUpload = $this->hashAndUpload($releaseTag, 'update.zip');
         $release->download_link_update = $updateUpload['url'];
         $release->sha1_update = $updateUpload['sha1'];
         $release->sha256_update = $updateUpload['sha256'];
 
-        $this->hashAndUpload($release->tag, 'install.tar.xz');
-        $minorBranch = VersioningService::getMinorBranch($release->tag);
+        $this->hashAndUpload($releaseTag, 'install.tar.xz');
+        $minorBranch = VersioningService::getMinorBranch($releaseTag);
         $this->hashAndUpload(
-            $release->tag,
+            $releaseTag,
             'install.tar.xz',
             'sw6/install_' . $minorBranch . '_next.tar.xz' // 6.2_next.tar.xz, 6.3.0_next.tar.xz, 6.3.1_next.tar.xz
         );
@@ -108,12 +106,13 @@ class ReleasePrepareService
     public function getReleaseList(): Release
     {
         $content = $this->deployFilesystem->read(self::SHOPWARE_XML_PATH);
+
         return simplexml_load_string($content, Release::class);
     }
 
     public function storeReleaseList(Release $release): void
     {
-        $dom = new \DOMDocument("1.0");
+        $dom = new \DOMDocument('1.0');
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
         $dom->loadXML($release->asXML());
@@ -124,24 +123,24 @@ class ReleasePrepareService
     public function registerUpdate(string $tag, Release $release): void
     {
         $baseParams = [
-            '--release-version' => (string)$release->version,
+            '--release-version' => (string) $release->version,
             '--channel' => VersioningService::getUpdateChannel($tag),
         ];
 
-        if (((string)$release->version_text) !== '') {
-            $baseParams['--version-text'] = (string)$release->version_text;
+        if (((string) $release->version_text) !== '') {
+            $baseParams['--version-text'] = (string) $release->version_text;
         }
 
         $insertReleaseParameters = array_merge($baseParams, [
             '--min-version' => $this->config['minimumVersion'] ?? '6.2.0',
-            '--install-uri' => (string)$release->download_link_install,
-            '--install-size' => (string)$this->artifactsFilesystem->getSize('install.zip'),
-            '--install-sha1' => (string)$release->sha1_install,
-            '--install-sha256' => (string)$release->sha256_install,
-            '--update-uri' => (string)$release->download_link_update,
-            '--update-size' => (string)$this->artifactsFilesystem->getSize('update.zip'),
-            '--update-sha1' => (string)$release->sha1_update,
-            '--update-sha256' => (string)$release->sha256_update
+            '--install-uri' => (string) $release->download_link_install,
+            '--install-size' => (string) $this->artifactsFilesystem->getSize('install.zip'),
+            '--install-sha1' => (string) $release->sha1_install,
+            '--install-sha256' => (string) $release->sha256_install,
+            '--update-uri' => (string) $release->download_link_update,
+            '--update-size' => (string) $this->artifactsFilesystem->getSize('update.zip'),
+            '--update-sha1' => (string) $release->sha1_update,
+            '--update-sha256' => (string) $release->sha256_update,
         ]);
 
         $this->updateApiService->insertReleaseData($insertReleaseParameters);
@@ -170,7 +169,7 @@ class ReleasePrepareService
         );
     }
 
-    private function hashAndUpload(string $tag, string $source, string $targetPath = null): array
+    private function hashAndUpload(string $tag, string $source, ?string $targetPath = null): array
     {
         $sha1 = $this->hashFile('sha1', $source);
         $sha256 = $this->hashFile('sha256', $source);
@@ -180,10 +179,11 @@ class ReleasePrepareService
 
         $targetPath = $targetPath ?: 'sw6/' . $parts[0] . '_' . $tag . '_' . $sha1 . '.' . $parts[1];
         $this->deployFilesystem->putStream($targetPath, $this->artifactsFilesystem->readStream($source));
+
         return [
             'url' => $this->config['deployFilesystem']['publicDomain'] . '/' . $targetPath,
             'sha1' => $sha1,
-            'sha256' => $sha256
+            'sha256' => $sha256,
         ];
     }
 
@@ -191,12 +191,13 @@ class ReleasePrepareService
     {
         $context = hash_init($alg);
         hash_update_stream($context, $this->artifactsFilesystem->readStream($path));
+
         return hash_final($context);
     }
 
     private function mayAlterChangelog(Release $release): bool
     {
         return !$release->isPublic()
-            && ((bool)($release->manual ?? false)) !== true;
+            && ((bool) ($release->manual ?? false)) !== true;
     }
 }

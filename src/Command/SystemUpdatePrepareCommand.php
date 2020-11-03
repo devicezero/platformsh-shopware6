@@ -11,16 +11,14 @@ use Shopware\Core\Framework\Update\Event\UpdatePostPrepareEvent;
 use Shopware\Core\Framework\Update\Event\UpdatePrePrepareEvent;
 use Shopware\Production\Kernel;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SystemUpdatePrepareCommand extends Command
 {
-    static public $defaultName = 'system:update:prepare';
+    public static $defaultName = 'system:update:prepare';
 
     /**
      * @var ContainerInterface
@@ -37,9 +35,10 @@ class SystemUpdatePrepareCommand extends Command
     {
         $output = new ShopwareStyle($input, $output);
 
-        $dsn = trim((string)($_SERVER['DATABASE_URL'] ?? getenv('DATABASE_URL')));
-        if ($dsn === '' || $dsn === Kernel::PLACEHOLDER_DATABASE_URL)  {
+        $dsn = trim((string) ($_SERVER['DATABASE_URL'] ?? getenv('DATABASE_URL')));
+        if ($dsn === '' || $dsn === Kernel::PLACEHOLDER_DATABASE_URL) {
             $output->note("Environment variable 'DATABASE_URL' not defined. Skipping " . $this->getName() . '...');
+
             return 0;
         }
 

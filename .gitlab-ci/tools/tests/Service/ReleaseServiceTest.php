@@ -1,15 +1,10 @@
-<?php
-
+<?php declare(strict_types=1);
 
 namespace Shopware\CI\Test\Service;
 
-
 use Composer\Semver\VersionParser;
 use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-use League\Flysystem\Filesystem;
 use PHPUnit\Framework\TestCase;
-use Shopware\CI\Service\ChangelogService;
 use Shopware\CI\Service\ReleasePrepareService;
 use Shopware\CI\Service\ReleaseService;
 use Shopware\CI\Service\TaggingService;
@@ -17,8 +12,10 @@ use Shopware\CI\Service\Xml\Release;
 
 class ReleaseServiceTest extends TestCase
 {
+    public const FAKE_PLATFORM_COMMIT_SHA = '01c209a305adaabaf894e6929290c69cdeadbeef';
+
     /**
-     * @var string
+     * @var int|null
      */
     private $daemonPid;
 
@@ -32,12 +29,24 @@ class ReleaseServiceTest extends TestCase
      */
     private $fakeRemoteRepos;
 
-    public const FAKE_PLATFORM_COMMIT_SHA = '01c209a305adaabaf894e6929290c69cdeadbeef';
+    public function tearDown(): void
+    {
+        $this->stopGitServer();
+
+        if ($this->fakeProd && trim($this->fakeProd) !== '/') {
+            exec('rm -Rf ' . escapeshellarg($this->fakeProd));
+        }
+
+        if ($this->fakeRemoteRepos && trim($this->fakeRemoteRepos) !== '/') {
+            exec('rm -Rf ' . escapeshellarg($this->fakeRemoteRepos) . '/*');
+        }
+    }
 
     public function validatePackageProvider(): array
     {
-        $validSha =   '36f9ca136c87f4d3f860cd6b2516f02f2516f02a';
+        $validSha = '36f9ca136c87f4d3f860cd6b2516f02f2516f02a';
         $invalidSha = '36f9ca136c87f4d3f860cd6b2516f02bdeadbeef';
+
         return [
             [
                 false,
@@ -45,7 +54,7 @@ class ReleaseServiceTest extends TestCase
                     'name' => 'shopware/core',
                     'version' => 'v6.1.0',
                     'source' => [
-                        'reference' => $validSha
+                        'reference' => $validSha,
                     ],
                 ],
                 'v6.1.1',
@@ -56,12 +65,12 @@ class ReleaseServiceTest extends TestCase
                     'name' => 'shopware/core',
                     'version' => 'v6.1.1',
                     'source' => [
-                        'reference' => $validSha
+                        'reference' => $validSha,
                     ],
                     'dist' => [
                         'type' => 'zip',
-                        'reference' => $validSha
-                    ]
+                        'reference' => $validSha,
+                    ],
                 ],
                 'v6.1.1',
             ],
@@ -71,12 +80,12 @@ class ReleaseServiceTest extends TestCase
                     'name' => 'shopware/core',
                     'version' => 'v6.2.0',
                     'source' => [
-                        'reference' => $validSha
+                        'reference' => $validSha,
                     ],
                     'dist' => [
                         'type' => 'zip',
-                        'reference' => $validSha
-                    ]
+                        'reference' => $validSha,
+                    ],
                 ],
                 'v6.2.0',
             ],
@@ -86,12 +95,12 @@ class ReleaseServiceTest extends TestCase
                     'name' => 'shopware/core',
                     'version' => 'v6.2.0',
                     'source' => [
-                        'reference' => $invalidSha
+                        'reference' => $invalidSha,
                     ],
                     'dist' => [
                         'type' => 'path',
-                        'reference' => $validSha
-                    ]
+                        'reference' => $validSha,
+                    ],
                 ],
                 'v6.2.0',
             ],
@@ -101,7 +110,7 @@ class ReleaseServiceTest extends TestCase
     /**
      * @dataProvider validatePackageProvider
      */
-    public function testValidatePackage(bool $expected, array $packageData, string $tag, string $expectedException = null, string $msg = null): void
+    public function testValidatePackage(bool $expected, array $packageData, string $tag, ?string $expectedException = null, ?string $msg = null): void
     {
         $releaseService = new ReleaseService(
             [],
@@ -129,7 +138,7 @@ class ReleaseServiceTest extends TestCase
         );
         $content = file_get_contents(__DIR__ . '/fixtures/shopware6.xml');
         /** @var Release $list */
-        $list =  simplexml_load_string($content, Release::class);
+        $list = simplexml_load_string($content, Release::class);
 
         $tag = 'v6.2.1';
 
@@ -137,9 +146,9 @@ class ReleaseServiceTest extends TestCase
 
         $before = $list->getRelease($tag);
 
-        $releasePrepareService->expects($this->once())->method('uploadArchives')->with($before);
-        $releasePrepareService->expects($this->once())->method('storeReleaseList')->with($list);
-        $releasePrepareService->expects($this->once())->method('registerUpdate')->with($tag, $before);
+        $releasePrepareService->expects(static::once())->method('uploadArchives')->with($before);
+        $releasePrepareService->expects(static::once())->method('storeReleaseList')->with($list);
+        $releasePrepareService->expects(static::once())->method('registerUpdate')->with($tag, $before);
 
         static::assertFalse($before->isPublic());
 
@@ -159,7 +168,7 @@ class ReleaseServiceTest extends TestCase
         );
         $content = file_get_contents(__DIR__ . '/fixtures/shopware6.xml');
         /** @var Release $list */
-        $list =  simplexml_load_string($content, Release::class);
+        $list = simplexml_load_string($content, Release::class);
 
         $tag = 'v6.2.1';
 
@@ -168,9 +177,9 @@ class ReleaseServiceTest extends TestCase
         $before = $list->getRelease($tag);
         $before->makePublic();
 
-        $releasePrepareService->expects($this->never())->method('uploadArchives');
-        $releasePrepareService->expects($this->never())->method('storeReleaseList');
-        $releasePrepareService->expects($this->never())->method('registerUpdate');
+        $releasePrepareService->expects(static::never())->method('uploadArchives');
+        $releasePrepareService->expects(static::never())->method('storeReleaseList');
+        $releasePrepareService->expects(static::never())->method('registerUpdate');
 
         static::assertTrue($before->isPublic());
 
@@ -195,11 +204,10 @@ class ReleaseServiceTest extends TestCase
         $releaseService->releasePackage($tag);
     }
 
-
     public function testReleaseTags(): void
     {
         $client = $this->createMock(Client::class);
-        $client->expects($this->once())->method('request');
+        $client->expects(static::once())->method('request');
 
         $this->setUpRepos();
 
@@ -228,11 +236,11 @@ class ReleaseServiceTest extends TestCase
         $prodSha = $this->execGit(['rev-parse', $tag], $this->fakeRemoteRepos . '/prod');
         static::assertSame($localProdSha, $prodSha);
 
-        $localProdSha = $this->execGit(['rev-parse', $tag], $this->fakeProd. '/repos/core');
+        $localProdSha = $this->execGit(['rev-parse', $tag], $this->fakeProd . '/repos/core');
         $prodSha = $this->execGit(['rev-parse', $tag], $this->fakeRemoteRepos . '/core');
         static::assertSame($localProdSha, $prodSha);
 
-        $localProdSha = $this->execGit(['rev-parse', $tag], $this->fakeProd. '/repos/storefront');
+        $localProdSha = $this->execGit(['rev-parse', $tag], $this->fakeProd . '/repos/storefront');
         $prodSha = $this->execGit(['rev-parse', $tag], $this->fakeRemoteRepos . '/storefront');
         static::assertSame($localProdSha, $prodSha);
 
@@ -253,19 +261,6 @@ class ReleaseServiceTest extends TestCase
         $this->stopGitServer();
     }
 
-    public function tearDown(): void
-    {
-        $this->stopGitServer();
-
-        if ($this->fakeProd && trim($this->fakeProd) !== '/') {
-            exec('rm -Rf ' . escapeshellarg($this->fakeProd));
-        }
-
-        if ($this->fakeRemoteRepos && trim($this->fakeRemoteRepos) !== '/') {
-            exec('rm -Rf ' . escapeshellarg($this->fakeRemoteRepos) . '/*');
-        }
-    }
-
     private function startGitServer(): void
     {
         $path = escapeshellarg($this->fakeRemoteRepos);
@@ -277,7 +272,7 @@ class ReleaseServiceTest extends TestCase
 
         echo $daemonCmd;
 
-        $this->daemonPid = exec($daemonCmd, $output, $returnCode);
+        $this->daemonPid = (int) exec($daemonCmd, $output, $returnCode);
     }
 
     private function stopGitServer(): void
@@ -285,7 +280,7 @@ class ReleaseServiceTest extends TestCase
         if ($this->daemonPid) {
             posix_kill($this->daemonPid, 9);
 
-            $pgrepPid = exec('pgrep git-daemon');
+            $pgrepPid = (int) exec('pgrep git-daemon');
             if ($pgrepPid) {
                 posix_kill($pgrepPid, 9);
             }
@@ -295,8 +290,7 @@ class ReleaseServiceTest extends TestCase
 
     private function makeFakeRelease($config, string $tag): void
     {
-        foreach($config['repos'] as $repo => $repoData) {
-
+        foreach ($config['repos'] as $repo => $repoData) {
             file_put_contents($repoData['path'] . '/PLATFORM_COMMIT_SHA', self::FAKE_PLATFORM_COMMIT_SHA);
 
             $this->execGit(['remote', 'remove', 'origin'], $repoData['path']);
@@ -308,7 +302,7 @@ class ReleaseServiceTest extends TestCase
 
         $base = $this->fakeProd;
         exec('cp ' . $base . '/composer.dev.json ' . $base . '/composer.json');
-        exec('composer update shopware/* --working-dir=' . escapeshellarg($this->fakeProd));
+        exec('composer update --working-dir=' . escapeshellarg($this->fakeProd));
         exec('cp ' . $base . '/composer.stable.json ' . $base . '/composer.json');
     }
 
@@ -317,7 +311,7 @@ class ReleaseServiceTest extends TestCase
         $config = [
             'projectId' => 184,
             'gitlabBaseUri' => 'https://gitlab.shopware.com/api/v4',
-            'gitlabApiToken' => 'token'
+            'gitlabApiToken' => 'token',
         ];
 
         $config['stability'] = 'stable';
@@ -330,12 +324,12 @@ class ReleaseServiceTest extends TestCase
         $config['repos'] = [
             'core' => [
                 'path' => $config['projectRoot'] . '/repos/core',
-                'remoteUrl' => $config['manyReposBaseUrl'] . '/core'
+                'remoteUrl' => $config['manyReposBaseUrl'] . '/core',
             ],
             'storefront' => [
                 'path' => $config['projectRoot'] . '/repos/storefront',
-                'remoteUrl' => $config['manyReposBaseUrl'] . '/storefront'
-            ]
+                'remoteUrl' => $config['manyReposBaseUrl'] . '/storefront',
+            ],
         ];
         $config['composerUpdateWaitTime'] = 0;
 
@@ -351,7 +345,8 @@ class ReleaseServiceTest extends TestCase
 
         exec('rm -Rf ' . escapeshellarg($this->fakeProd));
         exec('rm -Rf ' . escapeshellarg($this->fakeRemoteRepos) . '/*');
-        exec('cp -a '
+        exec(
+            'cp -a '
             . escapeshellarg(__DIR__ . '/fixtures/fake-prod-template') . ' '
             . escapeshellarg($this->fakeRemoteRepos . '/prod')
         );
@@ -370,18 +365,18 @@ class ReleaseServiceTest extends TestCase
             $this->execGit(['clone',
                 '--branch' => 'v6.1.0', '--bare',
                 $baseUrl . '/' . $repo,
-                $this->fakeRemoteRepos . '/' . $repo
+                $this->fakeRemoteRepos . '/' . $repo,
             ]);
             touch($this->fakeRemoteRepos . '/' . $repo . '/git-daemon-export-ok');
 
             $this->execGit(['clone',
                 $this->fakeRemoteRepos . '/' . $repo,
-                $this->fakeProd . '/repos/' . $repo
+                $this->fakeProd . '/repos/' . $repo,
             ]);
         }
     }
 
-    private function execGit(array $args, string $repository = null): string
+    private function execGit(array $args, ?string $repository = null): string
     {
         $arguments = $args;
         if ($repository) {
@@ -389,8 +384,8 @@ class ReleaseServiceTest extends TestCase
         }
 
         $cmd = 'git ';
-        foreach($arguments as $key => $value) {
-            if(!is_int($key)) {
+        foreach ($arguments as $key => $value) {
+            if (!is_int($key)) {
                 $cmd .= $key;
                 $cmd .= strpos($key, '--') !== 0 ? ' ' : '=';
             }
