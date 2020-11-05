@@ -33,7 +33,7 @@ class UpdateApiService
     {
         $escapedParameters = [];
         foreach ($parameters as $key => $value) {
-            $escapedParameters[] = $key . '=' . escapeshellarg($value);
+            $escapedParameters[] = $key . '=' . escapeshellarg((string) $value);
         }
         $command = sprintf(
             'ssh shopware@%s php /var/www/shopware-update-api/bin/console %s %s',
@@ -42,14 +42,13 @@ class UpdateApiService
             implode(' ', $escapedParameters)
         );
 
-        $returnCode = 0;
-
-        // TODO: activate
         echo $command . PHP_EOL;
-        // system($command, $returnCode);
+        // TODO: activate
+//        $returnCode = 0;
+//        system($command, $returnCode);
 
-        if ($returnCode !== 0) {
-            throw new \RuntimeException('Failed to execute "' . $command . '". Return code: ' . $returnCode);
-        }
+//        if ($returnCode !== 0) {
+//            throw new \RuntimeException('Failed to execute "' . $command . '". Return code: ' . $returnCode);
+//        }
     }
 }
