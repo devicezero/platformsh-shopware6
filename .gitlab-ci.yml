@@ -121,6 +121,23 @@ Static Analysis:
         - composer install -d .gitlab-ci/tools
         - php .gitlab-ci/tools/vendor/bin/ecs check --config easy-coding-standard.php
         - php .gitlab-ci/tools/vendor/bin/phpstan analyse
+        - php .gitlab-ci/tools/vendor/bin/psalm.phar
+
+Tools unit test:
+    stage: test
+    image: shopware/development:latest
+    only:
+        refs:
+            - merge_requests
+    script:
+        - composer install -d .gitlab-ci/tools
+        - php .gitlab-ci/tools/vendor/bin/phpunit --configuration .gitlab-ci/tools/phpunit.xml.dist --log-junit phpunit.junit.xml
+    artifacts:
+        when: always
+        paths:
+            - phpunit.junit.xml
+        reports:
+            junit: phpunit.junit.xml
 
 # Unit tests
 
