@@ -2,6 +2,8 @@
 
 namespace Shopware\CI\Service;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 class UpdateApiService
 {
     /**
@@ -9,9 +11,15 @@ class UpdateApiService
      */
     private $updateApiHost;
 
-    public function __construct(string $updateApiHost)
+    /**
+     * @var OutputInterface
+     */
+    private $stdout;
+
+    public function __construct(string $updateApiHost, OutputInterface $stdout)
     {
         $this->updateApiHost = $updateApiHost;
+        $this->stdout = $stdout;
     }
 
     public function insertReleaseData(array $parameters): void
@@ -42,7 +50,7 @@ class UpdateApiService
             implode(' ', $escapedParameters)
         );
 
-        echo $command . PHP_EOL;
+        $this->stdout->writeln('Run locally: ' . $command);
         // TODO: activate
 //        $returnCode = 0;
 //        system($command, $returnCode);
