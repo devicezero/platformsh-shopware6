@@ -6,7 +6,7 @@
 
 Prepare release:
     stage: prepare-release
-    image: debian:buster-slim
+    image: debian:bullseye-slim
     needs: ['Build Test Package']
     when: manual
     only:
@@ -32,7 +32,7 @@ Prepare release:
 
 Release tags:
     stage: release
-    image: alpine:3.11
+    image: alpine:3.13
     when: manual
     only:
         refs:
@@ -46,7 +46,7 @@ Release tags:
         PLATFORM_REPO_URL: "git@gitlab.shopware.com:shopware/6/product/platform"
         CI_REPOSITORY_URL: "git@gitlab.shopware.com:/shopware/6/product/production"
     before_script:
-        - apk --no-cache add openssh-client git bash jq composer php-ctype php-curl php-dom php-fileinfo php-gd php-iconv php-intl php-json php-mbstring php-pdo php-pdo_mysql php-simplexml php-xml php-zip php-xmlwriter php-tokenizer
+        - apk --no-cache add openssh-client git bash jq composer php-ctype php-curl php-dom php-fileinfo php-gd php-iconv php-intl php-json php-mbstring php-pdo php-pdo_mysql php-simplexml php-xml php-zip php-xmlwriter php-tokenizer php-sodium
         - mkdir -p ~/.ssh/
         - echo -e "$SHOPWAREBOT_PRIVATE_KEY" > ~/.ssh/id_rsa
         - chmod 600 ~/.ssh/id_rsa
@@ -74,34 +74,48 @@ Build package:
         variables:
             # only run this job if the tag is protected
             - $CI_COMMIT_REF_PROTECTED == "true"
-    image: docker
+    image: docker:19
     services:
         -   name: docker:18.09.7-dind
             alias: docker
     variables:
         GIT_STRATEGY: none
     before_script:
-        - apk --no-cache add git bash jq composer npm openssh-client php-ctype php-curl php-dom php-fileinfo php-gd php-iconv php-intl php-json php-mbstring php-pdo php-pdo_mysql php-simplexml php-xml php-zip php-xmlwriter php-tokenizer
+        - apk --no-cache add git bash jq composer npm openssh-client php-ctype php-curl php-dom php-fileinfo php-gd php-iconv php-intl php-json php-mbstring php-pdo php-pdo_mysql php-simplexml php-xml php-zip php-xmlwriter php-tokenizer php-sodium
         - umask 0022
         - git init .
         - git remote add origin ${CI_REPOSITORY_URL}
         - git fetch origin ${CI_COMMIT_SHA}
         - git checkout -f -q ${CI_COMMIT_SHA}
+        - git init .platform
+        - git -C .platform remote add origin https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/6/product/platform.git
+        - git -C .platform fetch origin $(cat PLATFORM_COMMIT_SHA)
+        # set platform HEAD to commit in PLATFORM_COMMIT_SHA file
+        - git -C .platform reset --soft FETCH_HEAD
+        - git -C .platform fetch --tags origin
     script:
         - composer install --no-interaction
         - docker build . -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
         - mkdir artifacts || true
         - chmod 777 artifacts || true
-        - docker run -v $PWD/artifacts:/artifacts -e REFERENCE_INSTALLER_URL -e REFERENCE_INSTALLER_SHA256 --entrypoint=bin/package.sh ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+        - .gitlab-ci/changed-files.sh > artifacts/additional_update_files
+        - .gitlab-ci/changed-files.sh --deleted > artifacts/additional_deleted_files
+        - docker run
+            -v $PWD/artifacts:/artifacts
+            -e REFERENCE_INSTALLER_URL -e REFERENCE_INSTALLER_SHA256
+            --entrypoint=bin/package.sh ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
+            /artifacts/additional_update_files
+            /artifacts/additional_deleted_files
         - echo ${CI_COMMIT_TAG} > artifacts/TAG
         - echo ${CI_JOB_ID} > artifacts/PACKAGE_JOB_ID
     artifacts:
+        when: always
         paths:
             - artifacts/
 
 Release package:
     stage: release
-    image: debian:buster-slim
+    image: debian:bullseye-slim
     only:
         refs:
             - tags

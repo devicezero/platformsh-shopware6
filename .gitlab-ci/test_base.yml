@@ -1,5 +1,5 @@
 .test_base:
-    image: shopware/development:latest
+    image: shopware/development:7.4-composer-2
     stage: test
     only:
         refs:
@@ -22,7 +22,7 @@
         DATABASE_URL: mysql://root:root@mysql:3306/sw6
         APP_URL: http://localhost:8000
         INSTANCE_ID: ""
-        MAILER_URL: smtp://localhost:25?encryption=&auth_mode=
+        MAILER_URL: "null://localhost"
         SHOPWARE_CDN_STRATEGY_DEFAULT: id
         BLUE_GREEN_DEPLOYMENT: 1
         SHOPWARE_ES_ENABLED: 1
@@ -126,6 +126,7 @@
         - curl ${E2E_TEST_DATA_URL} --silent -o test_data
         - 'if [ ${E2E_TEST_DATA_URL: -4} == ".zip" ]; then unzip -qqo test_data; else tar -xf test_data; fi'
         - rm test_data
+        - 'if [[ ! -r "public/.htaccess" && -r "public/.htaccess.dist" ]]; then  cp "public/.htaccess.dist" "public/.htaccess"; fi'
         # import test data dump
         - mysql -h mysql -u root -proot -e 'DROP DATABASE IF EXISTS `sw6_e2e_test`; CREATE DATABASE `sw6_e2e_test`; use `sw6_e2e_test`; source database.sql;'
         # set update api base url to mock

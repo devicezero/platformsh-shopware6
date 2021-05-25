@@ -32,7 +32,7 @@ See also: https://www.shopware.com/en/news/shopware-6-versioning-strategy/
 
 See [https://docs.shopware.com/en/shopware-platform-dev-en/getting-started/requirements](https://docs.shopware.com/en/shopware-platform-dev-en/getting-started/requirements)
 
-NPM and Node are only required during the build process and for development. If you don't have javascript customizations, it's not required at all. Because the storefront and admin are pre-build.
+NPM and Node are only required during the build process and for development. If you don't have javascript customizations it's not required at all because the storefront and admin are prebuilt.
 
 If you are using a separate build server, consider having NPM and Node as build-only requirements. Your operating application server doesn't require any of these to run Shopware 6.
 
@@ -41,8 +41,8 @@ If you are using a separate build server, consider having NPM and Node as build-
 To set up the environment and install with a basic setup run the following commands:
 
 ```bash
-# clone newest 6.1 patch version from github 
-git clone --branch=6.1 https://github.com/shopware/production shopware
+# clone the newest patch version from github 
+git clone --branch=[current version] https://github.com/shopware/production shopware
 cd shopware
 
 # install shopware and dependencies according to the composer.lock 
@@ -194,9 +194,9 @@ You only need to require the things you want. If you only want to run shopware 6
         }
     },
     "require": {
-        "php": "~7.2",
-        "ocramius/package-versions": "1.4.0",
-        "shopware/core": "~v6.1.0"
+        "php": "~7.4",
+        "composer/package-versions-deprecated": "^1.8.0",
+        "shopware/core": "~v[current version]"
     }
 }
 ```
@@ -237,7 +237,7 @@ The following directories should be shared by all app servers:
 .
 ├── config
 │   ├── jwt # ro - should be written on first deployment
-│   ├── secrets # rw shared - see, if you want to use it: https://symfony.com/blog/new-in-symfony-4-4-encrypted-secrets-management 
+│   ├── secrets # rw shared - For usage refer to: https://symfony.com/blog/new-in-symfony-4-4-encrypted-secrets-management 
 ├── public
 │   ├── bundles # rw shared - Written by `assets:install` / `theme:compile`, can also be initiated by the administration
 │   ├── media # rw shared
@@ -245,12 +245,12 @@ The following directories should be shared by all app servers:
 │   └── thumbnail # rw shared - media thumbnails
 │   └── sitemap # rw shared - generated sitemaps
 ├── var
-│   ├── cache # rw local - contains the containers, which contains additional cache directories (twig, translations, etc)
-│   ├── log # a - append only, can be change in the monlog config
+│   ├── cache # rw local - contains the containers which contain additional cache directories (twig, translations, etc)
+│   ├── log # a - append only, can be changed in the monolog config
 
 ro - Readonly after deployment
 rw shared - read and write access, it should be shared across the app servers
-rw local - locale read and write access
+rw local - local read and write access
 ```
 
-Some of these directories like `public` can also be changed to different flysystem to host the files on s3 for example.
+Some of these directories like `public` can also be changed to a different flysystem to host the files on s3 for example.
