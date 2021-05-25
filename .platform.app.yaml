@@ -37,6 +37,7 @@ runtime:
         - fileinfo
         - intl
         - redis
+        - sodium
 
 # The hooks that will be performed when the package is deployed.
 hooks:
