@@ -5052,12 +5052,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jenskueper/swag-paas.git",
-                "reference": "fa330da3542466803659d90947a7fb495fbf2320"
+                "reference": "04b32eee3a67134cfbe1db1a9bf3adda6a989a48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jenskueper/swag-paas/zipball/fa330da3542466803659d90947a7fb495fbf2320",
-                "reference": "fa330da3542466803659d90947a7fb495fbf2320",
+                "url": "https://api.github.com/repos/jenskueper/swag-paas/zipball/04b32eee3a67134cfbe1db1a9bf3adda6a989a48",
+                "reference": "04b32eee3a67134cfbe1db1a9bf3adda6a989a48",
                 "shasum": ""
             },
             "default-branch": true,
@@ -5082,7 +5082,7 @@
                 "source": "https://github.com/jenskueper/swag-paas/tree/master",
                 "issues": "https://github.com/jenskueper/swag-paas/issues"
             },
-            "time": "2020-07-16T06:32:05+00:00"
+            "time": "2021-05-27T08:41:37+00:00"
         },
         {
             "name": "shopware/recovery",
