@@ -11,7 +11,7 @@ build:
 
 dependencies:
     php:
-        composer/composer: '^2.0'
+        composer/composer: '^2'
 
 variables:
     env:
