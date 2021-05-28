@@ -26,12 +26,14 @@ function mapPlatformShEnvironment() : void
     }
 
     $config->registerFormatter('redis', __NAMESPACE__ . '\redisFormatter');
+    $config->registerFormatter('elasticsearch', __NAMESPACE__ . '\elasticsearchFormatter');
 
     // Set the URL based on the route.  This is a required route ID.
     setEnvVar('APP_URL', $config->getRoute('shopware')['url']);
 
     // Map services as feasible.
     mapPlatformShRedis('rediscache', $config);
+    mapPlatformShElasticsearch('essearch', $config);
 }
 
 /**
@@ -79,4 +81,31 @@ function mapPlatformShRedis(string $relationshipName, Config $config) : void
 function redisFormatter(array $credentials): string
 {
     return "redis://{$credentials['host']}:{$credentials['port']}";
+}
+
+/**
+ * Maps the specified relationship to the elasticsearch environment variables, if available.
+ *
+ * @param string $relationshipName
+ *   The search index relationship name.
+ * @param Config $config
+ *   The config object.
+ */
+function mapPlatformShElasticsearch(string $relationshipName, Config $config) : void
+{
+    if (!$config->hasRelationship($relationshipName)) {
+        return;
+    }
+
+    setEnvVar('SHOPWARE_ES_HOSTS', $config->formattedCredentials($relationshipName, 'elasticsearch'));
+    setEnvVar('SHOPWARE_ES_INDEXING_ENABLED', '1');
+    setEnvVar('SHOPWARE_ES_INDEX_PREFIX', 'sw6');
+    // uncomment to enable elasticsearch
+    // see https://developer.shopware.com/docs/guides/hosting/infrastructure/elasticsearch#activating-and-first-time-indexing
+    // setEnvVar('SHOPWARE_ES_ENABLED', '1');
+}
+
+function elasticsearchFormatter(array $credentials): string
+{
+    return "http://{$credentials['host']}:{$credentials['port']}";
 }

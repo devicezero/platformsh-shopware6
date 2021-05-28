@@ -108,6 +108,8 @@ hooks:
 relationships:
     database: "db:mysql"
     rediscache: "cacheredis:redis"
+    # uncomment if you want to use elasticsearch
+    # essearch: "searchelastic:elasticsearch"
 
 # The size of the persistent disk of the application (in MB).
 disk: 2048
