@@ -4,3 +4,8 @@ db:
 
 cacheredis:
     type: redis:6.0
+
+# uncomment if you want to use elasticsearch
+# searchelastic:
+#     type: elasticsearch:7.9
+#     disk: 256
