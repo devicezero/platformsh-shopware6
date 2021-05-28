@@ -68,7 +68,7 @@ hooks:
         export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-        if [ "$PLATFORM_BRANCH" != "master" ]; then
+        if [ "$PLATFORM_BRANCH" != "master" ] && [ "$PLATFORM_BRANCH" != "main" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
             bin/console sales-channel:update-domain "$FRONTEND_URL"
             bin/console theme:compile
