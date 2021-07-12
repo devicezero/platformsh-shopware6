@@ -8,7 +8,6 @@ variables:
     DEFAULT_PLATFORM_BRANCH: master
     LOG_STDOUT: $CI_PROJECT_DIR/stdout.log
     CYPRESS_PERCY_USAGE: $CYPRESS_PERCY_USAGE
-    PERCY_TOKEN: $PERCY_TOKEN
     PERCY_BUILD_NAME: '000'
 
 stages:
@@ -24,13 +23,15 @@ include:
     -   local: .gitlab-ci/integration_jobs.yml
 
 Build Test Package:
+    interruptible: true
     stage: build
     tags:
         - release
     only:
         refs:
             - schedules
-    image: debian:buster-slim
+            - merge_requests
+    image: debian:bullseye-slim
     services:
         -   name: docker:18.09.7-dind
             alias: docker
@@ -59,11 +60,13 @@ Build Test Package:
         - npm config set cache $PWD/.npm
         # we need to do the checkout to have correct permissions. See: https://gitlab.com/gitlab-org/gitlab-runner/-/issues/1736
         - umask 0022
+        - git config --global init.defaultBranch trunk
         - git init .
         - git remote add origin ${CI_REPOSITORY_URL}
         - git fetch origin $CI_COMMIT_BRANCH
         - git fetch --tags
         - git checkout -f -q ${CI_COMMIT_SHA}
+        - git log -n 5
         - composer config --global  cache-dir $PWD/.composer
         # install helper tools
         - composer install --working-dir=.gitlab-ci/tools
@@ -82,9 +85,10 @@ Build Test Package:
         - echo "Checkout platform branch $MATCHING_BRANCH"
         # fetch newest changes from $MATCHING_BRANCH
         - git -C .platform fetch origin ${MATCHING_BRANCH}
-        - git -C .platform log -n 5
         # set HEAD to newest commit in $$MATCHING_BRANCH
         - git -C .platform reset --soft FETCH_HEAD
+        - git -C .platform fetch --tags origin
+        - git -C .platform log -n 5
         # split platform into separate repos/packages
         - >
             for pkg in $SPLIT_REPOS ; do
@@ -98,9 +102,16 @@ Build Test Package:
         - mkdir artifacts || true
         - chmod 777 artifacts || true
         - .gitlab-ci/changed-files.sh > artifacts/additional_update_files
+        - .gitlab-ci/changed-files.sh --deleted > artifacts/additional_deleted_files
         # TODO: get REFERENCE_INSTALLER_URL and REFERENCE_INSTALLER_SHA256 from shopware6.xml - use MINIMUM_VERSION
         # create package archive file
-        - docker run -v $PWD/artifacts:/artifacts -e REFERENCE_INSTALLER_URL -e REFERENCE_INSTALLER_SHA256 --entrypoint=bin/package.sh ${CI_REGISTRY_IMAGE}:${IMAGE_TAG} /artifacts/additional_update_files
+        - 'echo "Default env: $DEFAULT_ENV"'
+        - docker run
+            -v $PWD/artifacts:/artifacts
+            -e DEFAULT_ENV -e REFERENCE_INSTALLER_URL -e REFERENCE_INSTALLER_SHA256
+            --entrypoint=bin/package.sh ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}
+            /artifacts/additional_update_files
+            /artifacts/additional_deleted_files
         - echo ${TAG} > artifacts/TAG
         - echo ${CI_JOB_ID} > artifacts/PACKAGE_JOB_ID
         - echo ${MATCHING_BRANCH} > artifacts/PLATFORM_BRANCH
@@ -113,20 +124,24 @@ Build Test Package:
 
 Static Analysis:
     stage: analyze
-    image: shopware/development:latest
+    image: shopware/development:7.4-composer-2
     only:
         refs:
             - merge_requests
     script:
+        - apt update && apt install shellcheck
+        # SC1090: source is not resolved
+        # SC2039: busybox sh supports [[
+        - shellcheck --exclude=SC1090 --exclude=SC2039 bin/*.sh .gitlab-ci/*.sh .gitlab-ci/tools/bin/*.sh .gitlab-ci/e2e/*.sh
         - composer install
         - composer install -d .gitlab-ci/tools
         - php .gitlab-ci/tools/vendor/bin/ecs check --config easy-coding-standard.php
         - php .gitlab-ci/tools/vendor/bin/phpstan analyse
-        - php .gitlab-ci/tools/vendor/bin/psalm.phar
+        - php .gitlab-ci/tools/vendor/bin/psalm
 
 Tools unit test:
     stage: test
-    image: shopware/development:latest
+    image: shopware/development:7.4-composer-2
     only:
         refs:
             - merge_requests
@@ -142,9 +157,9 @@ Tools unit test:
 
 # Unit tests
 
-Unit PHP 7.2:
+Unit PHP 7.4:
     extends: .unit_base
-    image: shopware/development:7.2
+    image: shopware/development:7.4-composer-2
 
 # e2e install tests
 
@@ -257,7 +272,7 @@ Manual Update (EN):
         - npx mochawesome-merge .gitlab-ci/e2e/test/artifacts/mochawesome/single-reports/mochawesome*.json > .gitlab-ci/e2e/test/artifacts/mochawesome/single-reports/report-final.json
         - npx mochawesome-report-generator .gitlab-ci/e2e/test/artifacts/mochawesome/single-reports/report-final.json --cdn true --reportDir .gitlab-ci/e2e/test/artifacts/mochawesome
 
-Update (EN, Mysql 8.0):
+Update (Mysql 8.0):
     extends: .E2E Update
     services:
         -   name: mysql:8.0.19
@@ -323,6 +338,31 @@ Update (DE):
         E2E_INSTALL_PACKAGE_URL: $REFERENCE_INSTALLER_URL
         E2E_TEST_DATA_FILE: "v6.1.6_test_data.tar.xz"
 
+
+Update from latest:
+    extends: .E2E Update
+    only:
+        refs:
+            - schedules
+        variables:
+            - $E2E_INSTALL_PACKAGE_URL_LATEST
+    script:
+        - cd .gitlab-ci/e2e/test/
+        - timeout 20m $(npm bin)/cypress run
+            --browser chrome --config baseUrl=http://localhost:8000,numTestsKeptInMemory=0 --headless
+            --env expectedVersion=$TAG,testBase="Update"
+            --spec cypress/integration/updater/auto-update.spec.js
+        - timeout 5m $(npm bin)/cypress run
+            --browser chrome --config baseUrl=http://localhost:8000,numTestsKeptInMemory=0 --headless
+            --env expectedVersion=$TAG,testDataUsage=true,testBase="Update",locale="de-DE"
+            --spec "cypress/integration/visual/*"
+        - cd $CI_PROJECT_DIR
+        - php bin/console bundle:dump
+        - bash bin/build-administration.sh
+    variables:
+        E2E_INSTALL_PACKAGE_URL: $E2E_INSTALL_PACKAGE_URL_LATEST
+        E2E_TEST_DATA_FILE: "v6.1.6_test_data.tar.xz"
+
 Finalize Percy Build:
     extends: .e2e_install_base
     stage: prepare-release
@@ -331,12 +371,13 @@ Finalize Percy Build:
         refs:
             - schedules
         variables:
-            - $CYPRESS_PERCY_USAGE == "true"
+            - '$CYPRESS_PERCY_USAGE == "true" && $PERCY_TOKEN'
     script:
         # finalize all visual testing jobs
         - export PERCY_TOKEN=$PERCY_TOKEN
         - export PERCY_BUILD_NAME=$CI_PIPELINE_ID
         - export PERCY_PARALLEL_NONCE=$PERCY_BUILD_NAME
         - export PERCY_PARALLEL_TOTAL=-1
-        - npx percy finalize --all
+        - npm install -g percy --unsafe-perm=true
+        - percy finalize --all
 

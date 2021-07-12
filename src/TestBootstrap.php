@@ -31,8 +31,8 @@ if (!file_exists($jwtDir) && !mkdir($jwtDir, 0770, true) && !is_dir($jwtDir)) {
 // generate jwt pk
 $key = openssl_pkey_new([
     'digest_alg' => 'aes256',
-    'private_key_type' => OPENSSL_KEYTYPE_RSA,
-    'encrypt_key_cipher' => OPENSSL_CIPHER_AES_256_CBC,
+    'private_key_type' => \OPENSSL_KEYTYPE_RSA,
+    'encrypt_key_cipher' => \OPENSSL_CIPHER_AES_256_CBC,
     'encrypt_key' => $_SERVER['JWT_PRIVATE_KEY_PASSPHRASE'],
 ]);
 
@@ -57,5 +57,7 @@ if (file_exists(TEST_PROJECT_DIR . '/.env.test')) {
     if (!class_exists(Dotenv::class)) {
         throw new RuntimeException('APP_ENV environment variable is not defined. You need to define environment variables for configuration or add "symfony/dotenv" as a Composer dependency to load variables from a .env.test file.');
     }
-    (new Dotenv(true))->load(TEST_PROJECT_DIR . '/.env.test');
+    (new Dotenv())
+        ->usePutenv(true)
+        ->load(TEST_PROJECT_DIR . '/.env.test');
 }

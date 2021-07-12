@@ -9,22 +9,16 @@ use Shopware\CI\Service\VersioningService;
 
 class VersioningServiceTest extends TestCase
 {
-    /**
-     * @var string
-     */
-    private $localTestRepoPath;
+    private ?string $localTestRepoPath = null;
 
-    /**
-     * @var string
-     */
-    private $remoteTestRepoPath;
+    private ?string $remoteTestRepoPath = null;
 
     public function tearDown(): void
     {
-        if ($this->localTestRepoPath) {
+        if ($this->localTestRepoPath !== null) {
             system('rm -Rf ' . escapeshellarg($this->localTestRepoPath));
         }
-        if ($this->remoteTestRepoPath) {
+        if ($this->remoteTestRepoPath !== null) {
             system('rm -Rf ' . escapeshellarg($this->remoteTestRepoPath));
         }
     }
@@ -345,8 +339,8 @@ class VersioningServiceTest extends TestCase
                 'tag' => '6.3.2.0',
             ],
             [
-                'expectedBranch' => 'master',
-                'branches' => ['master', '6.3.1', '6.3.3', '6.3.2.1'],
+                'expectedBranch' => 'trunk',
+                'branches' => ['trunk', '6.3.1', '6.3.3', '6.3.2.1'],
                 'tag' => '6.3.2.0',
             ],
         ];
@@ -400,7 +394,7 @@ CODE;
     private function mt_shuffle_array(array $array): array
     {
         $shuffled_array = [];
-        $arr_length = count($array);
+        $arr_length = \count($array);
 
         if ($arr_length < 2) {
             return $array;

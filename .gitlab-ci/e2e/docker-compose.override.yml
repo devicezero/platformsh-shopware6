@@ -10,7 +10,7 @@ version: "3.7"
 #  change port for install
 services:
     e2e_update:
-        image: shopware/development
+        image: shopware/development:7.4
         entrypoint: '/e2e/update_entrypoint.sh'
         volumes:
             - ".gitlab-ci/e2e/:/e2e"
@@ -27,9 +27,11 @@ services:
             # E2E_TEST_DATA_BASE_URL:
             # E2E_TEST_DATA_FILE: v6.1.6_test_data.tar.xz
             # E2E_INSTALL_PACKAGE_URL: https://releases.shopware.com/sw6/install_6.1.6_1589441426.zip
+            # # can be used to fetch newest release in that major line
+            # E2E_INSTALL_PACKAGE_USE_LATEST: 'true'
 
     e2e_install:
-        image: shopware/development
+        image: shopware/development:7.4
         entrypoint: '/e2e/install_entrypoint.sh'
         volumes:
             - ".gitlab-ci/e2e/:/e2e"

@@ -1,6 +1,8 @@
 /var
 !/var/plugins.json
+!/var/.htaccess
 /.*
+!/.htaccess
 **/*.git
 **/node_modules
 
