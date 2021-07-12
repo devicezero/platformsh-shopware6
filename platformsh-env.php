@@ -27,6 +27,7 @@ function mapPlatformShEnvironment() : void
 
     $config->registerFormatter('redis', __NAMESPACE__ . '\redisFormatter');
     $config->registerFormatter('elasticsearch', __NAMESPACE__ . '\elasticsearchFormatter');
+    $config->registerFormatter('rabbitmq', __NAMESPACE__ . '\rabbitmqFormatter');
 
     // Set the URL based on the route.  This is a required route ID.
     setEnvVar('APP_URL', $config->getRoute('shopware')['url']);
@@ -34,6 +35,7 @@ function mapPlatformShEnvironment() : void
     // Map services as feasible.
     mapPlatformShRedis('rediscache', $config);
     mapPlatformShElasticsearch('essearch', $config);
+    mapPlatformShRabbitmq('rabbitmqqueue', $config);
 }
 
 /**
@@ -108,4 +110,26 @@ function mapPlatformShElasticsearch(string $relationshipName, Config $config) : 
 function elasticsearchFormatter(array $credentials): string
 {
     return "http://{$credentials['host']}:{$credentials['port']}";
+}
+
+/**
+ * Maps the specified relationship to the rabbitmq environment variables, if available.
+ *
+ * @param string $relationshipName
+ *   The search index relationship name.
+ * @param Config $config
+ *   The config object.
+ */
+function mapPlatformShRabbitmq(string $relationshipName, Config $config) : void
+{
+    if (!$config->hasRelationship($relationshipName)) {
+        return;
+    }
+
+    setEnvVar('RABBITMQ_URL', $config->formattedCredentials($relationshipName, 'rabbitmq'));
+}
+
+function rabbitmqFormatter(array $credentials): string
+{
+    return "amqp://{$credentials['username']}:{$credentials['password']}@{$credentials['host']}:{$credentials['port']}/%2F?connection_timeout=1000&heartbeat=100&auto_setup=false";
 }
