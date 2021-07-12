@@ -9,3 +9,8 @@ cacheredis:
 # searchelastic:
 #     type: elasticsearch:7.9
 #     disk: 256
+
+# uncomment if you want to use rabbitmq
+# queuerabbit:
+#     type: rabbitmq:3.8
+#     disk: 1024

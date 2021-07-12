@@ -111,6 +111,8 @@ relationships:
     rediscache: "cacheredis:redis"
     # uncomment if you want to use elasticsearch
     # essearch: "searchelastic:elasticsearch"
+    # uncomment if you want to use rabbitmq
+    # rabbitmqqueue: "queuerabbit:rabbitmq"
 
 # The size of the persistent disk of the application (in MB).
 disk: 2048
