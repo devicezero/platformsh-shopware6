@@ -170,6 +170,9 @@ mounts:
     "/.global/cache":
         source: local
         source_path: "global/cache"
+    "/custom/apps":
+        source: local
+        source_path: "custom/apps"
 
 # The configuration of app when it is exposed to the web.
 web:
