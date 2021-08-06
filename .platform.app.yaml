@@ -19,8 +19,8 @@ variables:
         SHOPWARE_ENV: prod
         # Instance ID is empty by default, change to something unique in your project
         INSTANCE_ID: ''
-        # Make sure Symfony HTTP Cache is disabled, we used Redis instead
-        SHOPWARE_HTTP_CACHE_ENABLED: 0
+        # Enable HTTP Cache to get cache-control headers
+        SHOPWARE_HTTP_CACHE_ENABLED: 1
         # NVM and Node.js versions to install
         NVM_VERSION: v0.36.0
         NODE_VERSION: v12.19.0
