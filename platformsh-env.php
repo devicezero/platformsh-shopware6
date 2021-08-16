@@ -77,8 +77,6 @@ function mapPlatformShRedis(string $relationshipName, Config $config) : void
         return;
     }
     $redis_credentials = $config->credentials($relationshipName);
-    printf($redis_credentials['host']);
-    printf($redis_credentials['port']);
     setEnvVar('REDIS_HOST', (string)$redis_credentials['host']);
     setEnvVar('REDIS_PORT', (int)$redis_credentials['port']);
 
