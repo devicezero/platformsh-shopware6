@@ -46,7 +46,7 @@ function mapPlatformShEnvironment() : void
  * @param null|string $value
  *   The value to set.  Null to unset it.
  */
-function setEnvVar(string $name, ?string $value) : void
+function setEnvVar(string $name, $value) : void
 {
     if (!putenv("$name=$value")) {
         throw new \RuntimeException('Failed to create environment variable: ' . $name);
@@ -76,6 +76,9 @@ function mapPlatformShRedis(string $relationshipName, Config $config) : void
     if (!$config->hasRelationship($relationshipName)) {
         return;
     }
+    $redis_credentials = $config->credentials($relationshipName);
+    setEnvVar('REDIS_HOST', (string)$redis_credentials['host']);
+    setEnvVar('REDIS_PORT', $redis_credentials['port']);
 
     setEnvVar('REDIS_URL', $config->formattedCredentials($relationshipName, 'redis'));
 }
