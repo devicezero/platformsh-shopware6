@@ -24,6 +24,9 @@ variables:
         # NVM and Node.js versions to install
         NVM_VERSION: v0.36.0
         NODE_VERSION: v12.19.0
+        # Use different redis dbs for cache and sessions
+        REDIS_CACHE_DATABASE: 1
+        REDIS_SESSION_DATABASE: 2
     php:
         upload_max_filesize: 6M
 
