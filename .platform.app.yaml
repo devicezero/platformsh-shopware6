@@ -63,7 +63,7 @@ hooks:
         # Disable UI installer
         touch install.lock
 
-        bin/ci bundle:dump
+        # bin/ci bundle:dump
         mv var/plugins.json build-plugins.json
 
     deploy: |
