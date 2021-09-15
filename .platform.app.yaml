@@ -64,7 +64,7 @@ hooks:
         touch install.lock
 
         bin/ci bundle:dump
-        mv /var/plugins.json build-plugins.json
+        mv var/plugins.json build-plugins.json
 
     deploy: |
         set -e
