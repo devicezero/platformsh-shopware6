@@ -63,6 +63,8 @@ hooks:
         # Disable UI installer
         touch install.lock
 
+        mv /var/plugins.json build-plugins.json
+
     deploy: |
         set -e
 
@@ -71,6 +73,8 @@ hooks:
         export NO_UPDATE_NOTIFIER=1
         export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+        mv build-plugins.json /var/plugins.json
 
         if [ "$PLATFORM_BRANCH" != "master" ] && [ "$PLATFORM_BRANCH" != "main" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
@@ -134,6 +138,9 @@ mounts:
     "/custom/plugins":
         source: local
         source_path: "custom/plugins"
+    "/var":
+        source: local
+        source_path: "var"
     "/var/cache":
         source: local
         source_path: "var/cache"
