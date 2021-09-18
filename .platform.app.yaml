@@ -63,6 +63,11 @@ hooks:
         # Disable UI installer
         touch install.lock
 
+        # compile theme and save config for later (will be moved to mount)
+        bin/ci theme:compile
+        mkdir build-tmp
+        cp -R files/theme-config build-tmp
+
     deploy: |
         set -e
 
@@ -71,6 +76,9 @@ hooks:
         export NO_UPDATE_NOTIFIER=1
         export NVM_DIR="$PLATFORM_APP_DIR/.nvm"
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+        # restore theme config from build to mount in case theme needs rebuilding during runtime
+        cp -R build-tmp/theme-config files/
 
         if [ "$PLATFORM_BRANCH" != "master" ] && [ "$PLATFORM_BRANCH" != "main" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
@@ -89,9 +97,6 @@ hooks:
             # generate JWT
             echo "Running system:generate-jwt-secret"
             bin/console system:generate-jwt-secret
-
-            # compile theme
-            bin/console theme:compile
 
             # refresh plugins and enable PaaS Plugin
             bin/console plugin:refresh
