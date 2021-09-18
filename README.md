@@ -27,6 +27,12 @@ The following changes have been made relative to a plain Shopware production pro
 -   [`config/packages/shopware.yaml`](config/packages/shopware.yaml) has been updated to disable auto update
 -   [`config/packages/shopware.yaml`](config/packages/shopware.yaml) has been updated to disable the admin worker (a message consumer is started instead, see the `workers` section in [`.platform.app.yaml`](.platform.app.yaml))
 
+## Stateless Builds
+
+This build uses [Stateless Builds](https://developer.shopware.com/docs/guides/hosting/installation-updates/deployments/stateless-builds).
+
+To support the stateless build for the theme, the theme-config is checked into git for it being available during the build process (an alternative is to store it on an external object storage).
+
 ## Optional additions
 
 ### Elasticsearch
@@ -44,13 +50,6 @@ The following changes have been made relative to a plain Shopware production pro
 4. For RabbitMQ to work, you need to manually add a queue named `shopware-queue` and a `messages` exchange. To do this you can e.g. use the platform CLI to open a tunnel (`ssh -L 15672:rabbitmqqueue.internal:15672 $(platform ssh --pipe -A app)`) and open the UI via `http://localhost:15672/`. You can get the credentials via `platform relationships`. `RABBITMQ_URL` is set in [`platformsh-env.php`](platformsh-env.php).
 5. `composer require enqueue/amqp-bunny`
 6. Uncomment [`config/packages/enqueue.yaml`](config/packages/enqueue.yaml)
-
-## Known issues
-
-Shopware is currently improving the process to build themes and plugins to accomodate the [`Platform.sh build and deploy process`](https://docs.platform.sh/overview/build-deploy.html) better.
-
--   https://issues.shopware.com/issues/NEXT-15802
--   https://issues.shopware.com/issues/NEXT-15798
 
 ## References
 
