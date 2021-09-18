@@ -86,6 +86,7 @@ hooks:
         fi
 
         # Initialize the Shopware site's data set if it's not already installed.
+        # (This is only for demo/first install and can be removed once Shopware is initialized)
         if [ ! -f $PLATFORM_APP_DIR/installer/installed ]; then
             # setup the environment
 
