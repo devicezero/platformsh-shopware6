@@ -77,7 +77,7 @@ hooks:
         [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
         # move plugin config into mount
-        mv build-plugins.json var/plugins.json
+        cp build-plugins.json var/plugins.json
 
         if [ "$PLATFORM_BRANCH" != "master" ] && [ "$PLATFORM_BRANCH" != "main" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
