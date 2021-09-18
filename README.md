@@ -45,12 +45,9 @@ The following changes have been made relative to a plain Shopware production pro
 5. `composer require enqueue/amqp-bunny`
 6. Uncomment [`config/packages/enqueue.yaml`](config/packages/enqueue.yaml)
 
-## Known issues
+## Build
 
-Shopware is currently improving the process to build themes and plugins to accomodate the [`Platform.sh build and deploy process`](https://docs.platform.sh/overview/build-deploy.html) better.
-
--   https://issues.shopware.com/issues/NEXT-15802
--   https://issues.shopware.com/issues/NEXT-15798
+This build uses [Stateless Builds](https://developer.shopware.com/docs/guides/hosting/installation-updates/deployments/stateless-builds).
 
 ## References
 
