@@ -20,6 +20,7 @@ mapPlatformShEnvironment();
 function mapPlatformShEnvironment() : void
 {
     $config = new Config();
+    print_r("config");
     print_r($config->inRuntime());
 
     if (!$config->inRuntime()) {
