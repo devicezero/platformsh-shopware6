@@ -64,9 +64,12 @@ hooks:
         touch install.lock
 
         # compile theme and save config for later (will be moved to mount)
-        bin/ci theme:compile
+        ./bin/build-js.sh
         mkdir build-tmp
         cp -R files/theme-config build-tmp
+
+        # save plugin config for later (will be moved to mount)
+        cp var/plugins.json build-plugins.json
 
     deploy: |
         set -e
@@ -80,6 +83,9 @@ hooks:
         # restore theme config from build to mount in case theme needs rebuilding during runtime
         cp -R build-tmp/theme-config files/
 
+        # restore plugin config to mount
+        cp build-plugins.json var/plugins.json
+
         if [ "$PLATFORM_BRANCH" != "master" ] && [ "$PLATFORM_BRANCH" != "main" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
             bin/console sales-channel:update-domain "$FRONTEND_URL"
@@ -87,6 +93,7 @@ hooks:
         fi
 
         # Initialize the Shopware site's data set if it's not already installed.
+        # (This is only for demo/first install and can be removed once Shopware is initialized)
         if [ ! -f $PLATFORM_APP_DIR/installer/installed ]; then
             # setup the environment
 
@@ -139,6 +146,9 @@ mounts:
     "/custom/plugins":
         source: local
         source_path: "custom/plugins"
+    "/var":
+        source: local
+        source_path: "var"
     "/var/cache":
         source: local
         source_path: "var/cache"
