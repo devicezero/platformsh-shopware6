@@ -88,11 +88,6 @@ hooks:
         # restore plugin config to mount
         cp build-plugins.json var/plugins.json
 
-        if [ "$PLATFORM_ENVIRONMENT_TYPE" != production ]; then
-            export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
-            bin/console sales-channel:update-domain "$FRONTEND_URL"
-        fi
-
         # Initialize the Shopware site's data set if it's not already installed.
         # (This is only for demo/first install and can be removed once Shopware is initialized)
         if [ ! -f $PLATFORM_APP_DIR/installer/installed ]; then
@@ -115,6 +110,11 @@ hooks:
             # mark system as installed
             touch $PLATFORM_APP_DIR/installer/installed
         fi;
+
+        if [ "$PLATFORM_ENVIRONMENT_TYPE" != production ]; then
+            export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
+            bin/console sales-channel:update-domain "$FRONTEND_URL"
+        fi
 
         # optional: run migration automatically with deploy
         bin/console database:migrate --all
