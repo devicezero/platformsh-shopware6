@@ -35,10 +35,12 @@ To support the stateless build for the theme, the theme-config is checked into g
 
 To update the config
 
+> IMPORTANT: You have to run this once after the first install, otherwise the Frontend will not load css/js files correctly.
+
 -   Dump the theme config e.g. via `platform ssh -A app 'bin/console theme:dump'` (this will generate new config files in files/theme config)
--   Download them locally via `platform mount:download --mount 'files' --target 'files' -A app`
--   You can then remove the old files and add the new files to git
--   Commit and Push for a redeployment
+-   Download the the generated theme config via `platform mount:download --mount 'files' --target 'files' -A app`
+-   You can then remove the old files and add the new files to git (`git add files/theme-config`, `git commit -m 'update theme config'`)
+-   Commit and Push for a redeployment (`git push`)
 
 ## Optional additions
 
