@@ -64,6 +64,7 @@ hooks:
         touch install.lock
 
         # compile theme and save config for later (will be moved to mount)
+        export CI="true"
         ./bin/build-js.sh
         mkdir build-tmp
         cp -R files/theme-config build-tmp
