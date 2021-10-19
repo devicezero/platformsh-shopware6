@@ -10,6 +10,7 @@ BIN_TOOL="${CWD}/console"
 if [[ ${CI} ]]; then
     BIN_TOOL="${CWD}/ci"
     chmod +x "$BIN_TOOL"
+    echo "using ci"
 fi
 
 # build storefront
