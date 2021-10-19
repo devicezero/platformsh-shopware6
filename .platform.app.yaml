@@ -89,7 +89,6 @@ hooks:
         if [ "$PLATFORM_BRANCH" != "master" ] && [ "$PLATFORM_BRANCH" != "main" ]; then
             export FRONTEND_URL=`echo $PLATFORM_ROUTES | base64 --decode | jq -r 'to_entries[] | select(.value.id=="shopware") | .key'`
             bin/console sales-channel:update-domain "$FRONTEND_URL"
-            bin/console theme:compile
         fi
 
         # Initialize the Shopware site's data set if it's not already installed.
@@ -137,57 +136,27 @@ mounts:
     "/files":
         source: local
         source_path: "files"
-    "/app":
-        source: local
-        source_path: "app"
-    "/config/secrets":
-        source: local
-        source_path: "config/secrets"
-    "/custom/plugins":
-        source: local
-        source_path: "custom/plugins"
-    "/var":
-        source: local
-        source_path: "var"
-    "/var/cache":
-        source: local
-        source_path: "var/cache"
-    "/var/queue":
-        source: local
-        source_path: "var/queue"
-    "/var/log":
-        source: local
-        source_path: "var/log"
-    "/public/css":
-        source: local
-        source_path: "public/css"
-    "/public/fonts":
-        source: local
-        source_path: "public/fonts"
-    "/public/js":
-        source: local
-        source_path: "public/js"
     "/public/media":
         source: local
         source_path: "public/media"
     "/public/thumbnail":
         source: local
         source_path: "public/thumbnail"
-    "/public/theme":
+    "/config/secrets":
         source: local
-        source_path: "public/theme"
-    "/public/bundles":
+        source_path: "config/secrets"
+    "/var":
         source: local
-        source_path: "public/bundles"
-    "/config/jwt":
-        source: local
-        source_path: "config/jwt"
+        source_path: "var"
     "/installer":
         source: local
         source_path: "installer"
-    "/.global/cache":
+    "/.global":
         source: local
-        source_path: "global/cache"
+        source_path: "global"
+    "/.cache":
+        source: local
+        source_path: ".cache"
     "/custom/apps":
         source: local
         source_path: "custom/apps"
