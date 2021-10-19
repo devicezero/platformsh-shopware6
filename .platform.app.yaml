@@ -164,6 +164,9 @@ mounts:
     "/custom/apps":
         source: local
         source_path: "custom/apps"
+    "/custom/plugins":
+        source: local
+        source_path: "custom/plugins"
 
 # The configuration of app when it is exposed to the web.
 web:
