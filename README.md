@@ -29,9 +29,16 @@ The following changes have been made relative to a plain Shopware production pro
 
 ## Stateless Builds
 
-This build uses [Stateless Builds](https://developer.shopware.com/docs/guides/hosting/installation-updates/deployments/stateless-builds).
+This build uses ["Building without Database"](https://developer.shopware.com/docs/guides/hosting/installation-updates/deployments/build-w-o-db).
 
 To support the stateless build for the theme, the theme-config is checked into git for it being available during the build process (an alternative is to store it on an external object storage).
+
+To update the config
+
+-   Dump the theme config e.g. via `platform ssh -A app 'bin/console theme:dump'` (this will generate new config files in files/theme config)
+-   Download them locally via `platform mount:download --mount 'files' --target 'files' -A app`
+-   You can then remove the old files and add the new files to git
+-   Commit and Push for a redeployment
 
 ## Optional additions
 
