@@ -145,6 +145,9 @@ mounts:
     "/config/secrets":
         source: local
         source_path: "config/secrets"
+    "/config/jwt":
+        source: local
+        source_path: "config/jwt"
     "/var":
         source: local
         source_path: "var"
