@@ -72,8 +72,6 @@ hooks:
         # save plugin config for later (will be moved to mount)
         cp var/plugins.json build-plugins.json
 
-        bin/ci theme:compile
-
     deploy: |
         set -e
 
