@@ -41,3 +41,4 @@ fi
 
 (cd "${ADMIN_ROOT}"/Resources/app/administration && npm clean-install && npm run build)
 [[ ${SHOPWARE_SKIP_ASSET_COPY} ]] ||"${BIN_TOOL}" asset:install
+
