@@ -57,29 +57,21 @@ class SystemUpdateFinishCommand extends Command
         $output->writeln('Run Post Update');
         $output->writeln('');
 
-        /** @var Kernel $kernel */
-        $kernel = $this->container->get('kernel');
-        $pluginLoader = $kernel->getPluginLoader();
+        $containerWithoutPlugins = $this->rebootKernelWithoutPlugins();
 
-        try {
-            $containerWithoutPlugins = $this->rebootKernelWithoutPlugins();
+        $context = Context::createDefaultContext();
+        $oldVersion = $this->systemConfigService->getString(UpdateController::UPDATE_PREVIOUS_VERSION_KEY);
 
-            $context = Context::createDefaultContext();
-            $oldVersion = $this->systemConfigService->getString(UpdateController::UPDATE_PREVIOUS_VERSION_KEY);
-
-            $newVersion = $containerWithoutPlugins->getParameter('kernel.shopware_version');
-            if (!\is_string($newVersion)) {
-                throw new \RuntimeException('Container parameter "kernel.shopware_version" needs to be a string');
-            }
-
-            /** @var EventDispatcherInterface $eventDispatcherWithoutPlugins */
-            $eventDispatcherWithoutPlugins = $this->rebootKernelWithoutPlugins()->get('event_dispatcher');
-            $eventDispatcherWithoutPlugins->dispatch(new UpdatePreFinishEvent($context, $oldVersion, $newVersion));
-
-            $this->runMigrations($output);
-        } finally {
-            $kernel->reboot(null, $pluginLoader);
+        $newVersion = $containerWithoutPlugins->getParameter('kernel.shopware_version');
+        if (!\is_string($newVersion)) {
+            throw new \RuntimeException('Container parameter "kernel.shopware_version" needs to be a string');
         }
+
+        /** @var EventDispatcherInterface $eventDispatcherWithoutPlugins */
+        $eventDispatcherWithoutPlugins = $this->rebootKernelWithoutPlugins()->get('event_dispatcher');
+        $eventDispatcherWithoutPlugins->dispatch(new UpdatePreFinishEvent($context, $oldVersion, $newVersion));
+
+        $this->runMigrations($output);
 
         $updateEvent = new UpdatePostFinishEvent($context, $oldVersion, $newVersion);
         $this->eventDispatcher->dispatch($updateEvent);
