@@ -33,6 +33,7 @@ custom/*
 !/public/bundles/.gitkeep
 
 /files/*
+!/files/theme-config
 
 /platform/
 /repos/
